@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  mysql:
+    image: mariadb:10
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_USER: gerbera
+      MYSQL_PASSWORD: gerbera
+      MYSQL_ROOT_PASSWORD: gerbera
+      MYSQL_DATABASE: gerbera
+      TZ: "Asia/Tokyo"
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-file: 1
+        max-size: "10M"
+  gerbera:
+    build: ./gerbera
+    image: gerbera
+    ports:
+      - 49152:49152
+      - 1900:1900/udp
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-file: 1
+        max-size: "10M"
