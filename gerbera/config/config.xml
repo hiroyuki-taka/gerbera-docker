@@ -10,7 +10,8 @@
             </accounts>
         </ui>
         <port>49152</port>
-        <name>Gerbera&gt;docker&lt;</name>
+        <udn></udn>
+        <name>Gerbera&lt;docker&gt;</name>
         <home>/root/.config/gerbera</home>
         <webroot>/usr/local/share/gerbera/web</webroot>
         <alive>1800</alive>
@@ -41,7 +42,7 @@
         <filesystem-charset>UTF-8</filesystem-charset>
         <metadata-charset>UTF-8</metadata-charset>
         <autoscan use-notiry="yes">
-            <directory location="/video" mode="inotify" recursive="yes" hidden-files="no" />
+            <directory location="/root/video" mode="inotify" recursive="yes" hidden-files="no" />
         </autoscan>
         <scripting script-charset="UTF-8">
             <virtual-layout type="builtin">
