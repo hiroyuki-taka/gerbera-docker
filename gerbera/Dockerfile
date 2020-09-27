@@ -26,14 +26,6 @@ RUN apk add --no-cache tini \
     rm -rf /gerbera_build && \
     apk del --purge .dev-packages
 
-RUN mkdir -p /root/.config/gerbera &&\
-    gerbera --create-config > /root/.config/gerbera/config.xml &&\
-    sed 's/<import hidden-files="no">/<import hidden-files="no">\n\
-<autoscan use-inotify="yes">\n\
-<directory location="\/root" mode="inotify" \
-recursive="yes" hidden-files="no"\/>\n\
-<\/autoscan>/' -i /root/.config/gerbera/config.xml
-
 EXPOSE 49152
 EXPOSE 1900/udp
 
