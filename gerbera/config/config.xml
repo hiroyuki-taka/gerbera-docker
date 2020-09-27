@@ -16,7 +16,7 @@
         <webroot>/usr/local/share/gerbera/web</webroot>
         <alive>1800</alive>
         <storage>
-            <mysql enable="yes">
+            <mysql enabled="yes">
                 <host>mysql</host>
                 <username>gerbera</username>
                 <password>gerbera</password>
