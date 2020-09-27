@@ -20,6 +20,7 @@ services:
     build: ./gerbera
     volumes:
       - ./gerbera/config:/root/.config/gerbera
+      - /srv/movie:/root/movie:ro
     ports:
       - 49152:49152
       - 1900:1900/udp
