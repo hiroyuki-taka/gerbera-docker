@@ -14,17 +14,20 @@ services:
     logging:
       driver: json-file
       options:
-        max-file: 1
+        max-file: "1"
         max-size: "10M"
   gerbera:
     build: ./gerbera
-    image: gerbera
+    volumes:
+      - ./gerbera/config:/root/.config/gerbera
     ports:
       - 49152:49152
       - 1900:1900/udp
     restart: always
+    depends_on:
+      - mysql
     logging:
       driver: json-file
       options:
-        max-file: 3
+        max-file: "3"
         max-size: "10M"
