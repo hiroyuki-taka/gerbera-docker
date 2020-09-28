@@ -50,7 +50,8 @@
             <directory location="/srv/movie" mode="timed" interval="3600" recursive="yes" hidden-files="no" />
         </autoscan>
         <layout parent-path="yes">
-            <path from="([0-9]{4}.Q) (.*)" to="$1/$2" />
+            <path from="([0-9]{4})(.Q) (.*)" to="Year/$1/$2/$3" />
+            <path from="([0-9]{4})([0-9]{2}) (.*)" to="Year/$1/$2/$3" />
         </layout>
         <resources case-sensitive="yes">
             <subtitle>
