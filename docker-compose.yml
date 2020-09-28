@@ -22,12 +22,11 @@ services:
       - ${PWD}/gerbera/config:/root/.config/gerbera
       - /srv/movie:/srv/movie:ro
     ports:
-      - 49152:49152
-      - 1900:1900/udp
+      - "49152:49152"
+      - "1900:1900/udp"
     restart: always
     depends_on:
       - mysql
-    network_mode: host
     logging:
       driver: json-file
       options:
