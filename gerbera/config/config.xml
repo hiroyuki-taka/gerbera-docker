@@ -41,14 +41,22 @@
     <import hidden-files="no">
         <filesystem-charset>UTF-8</filesystem-charset>
         <metadata-charset>UTF-8</metadata-charset>
-        <autoscan use-notiry="yes">
-            <directory location="/root/video" mode="inotify" recursive="yes" hidden-files="no" />
-        </autoscan>
         <scripting script-charset="UTF-8">
             <virtual-layout type="builtin">
                 <import-script>/usr/local/share/gerbera/js/import.js</import-script>
             </virtual-layout>
         </scripting>
+        <autoscan use-notiry="auto">
+            <directory location="/srv/movie" mode="timed" interval="3600" recursive="yes" hidden-files="no" />
+        </autoscan>
+        <layout parent-path="yes">
+            <path from="([0-9]{4}.Q) (.*)" to="\1/\2" />
+        </layout>
+        <resources case-sensitive="yes">
+            <subtitle>
+                <add-file name="%filename%.ass" />
+            </subtitle>
+        </resources>
         <mappings>
             <extension-mimetype ignore-unknown="no">
                 <map from="mp3" to="audio/mpeg" />
