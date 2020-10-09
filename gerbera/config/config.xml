@@ -15,8 +15,12 @@
         <home>/root/.config/gerbera</home>
         <webroot>/usr/local/share/gerbera/web</webroot>
         <alive>1800</alive>
-        <storage>
-            <mysql enabled="yes">
+	<pc-directory upnp-hide="yes" />
+	<storage>
+ 	   <sqlite3 enabled="yes">
+                <database-file>/root/.config/gerbera/gerbera.db</database-file>
+	   </sqlite3>
+           <mysql enabled="no">
                 <host>mysql</host>
                 <username>gerbera</username>
                 <password>gerbera</password>
