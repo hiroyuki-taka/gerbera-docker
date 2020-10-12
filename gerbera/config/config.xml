@@ -6,22 +6,22 @@
     <server>
         <ui enabled="yes" show-tooltips="yes">
             <accounts enabled="no" session-timeout="30">
-                <account user="gerbera" password="gerbera" />
+                <account user="gerbera" password="gerbera"/>
             </accounts>
         </ui>
         <port>49152</port>
-        <udn></udn>
+        <udn>uuid:a66ce585-631e-4ab1-a026-d7dbdeda5c7c</udn>
         <name>Gerbera&lt;docker&gt;</name>
         <home>/root/.config/gerbera</home>
         <webroot>/usr/local/share/gerbera/web</webroot>
         <alive>1800</alive>
-	<pc-directory upnp-hide="yes" />
-	<storage>
- 	   <sqlite3 enabled="yes">
+        <pc-directory upnp-hide="yes"/>
+        <storage>
+            <sqlite3 enabled="yes">
                 <database-file>/root/.config/gerbera/gerbera.db</database-file>
-	   </sqlite3>
-           <mysql enabled="no">
-                <host>mysql</host>
+            </sqlite3>
+            <mysql enabled="no">
+                <host>database</host>
                 <username>gerbera</username>
                 <password>gerbera</password>
                 <database>gerbera</database>
@@ -51,76 +51,76 @@
             </virtual-layout>
         </scripting>
         <autoscan use-notiry="auto">
-            <directory location="/srv/movie" mode="timed" interval="3600" recursive="yes" hidden-files="no" />
+            <directory location="/srv/movie" mode="timed" interval="3600" recursive="yes" hidden-files="no"/>
         </autoscan>
         <layout parent-path="yes">
-            <path from="([0-9]{4})(.Q) (.*)" to="Year/$1/$2/$3" />
-            <path from="([0-9]{4})([0-9]{2}) (.*)" to="Year/$1/$2/$3" />
+            <path from="([0-9]{4})(.Q) (.*)" to="Year/$1/$2/$3"/>
+            <path from="([0-9]{4})([0-9]{2}) (.*)" to="Year/$1/$2/$3"/>
         </layout>
         <resources case-sensitive="yes">
             <subtitle>
-                <add-file name="%filename%.ass" />
+                <add-file name="%filename%.ass"/>
             </subtitle>
         </resources>
         <mappings>
             <extension-mimetype ignore-unknown="no">
-                <map from="mp3" to="audio/mpeg" />
-                <map from="mp4" to="video/mpeg" />
-                <map from="m4a" to="audio/mpeg" />
-                <map from="ogx" to="application/ogg" />
-                <map from="ogv" to="video/ogg" />
-                <map from="oga" to="audio/ogg" />
-                <map from="ogg" to="audio/ogg" />
-                <map from="ogm" to="video/ogg" />
-                <map from="asf" to="video/x-ms-asf" />
-                <map from="asx" to="video/x-ms-asf" />
-                <map from="wma" to="audio/x-ms-wma" />
-                <map from="wax" to="audio/x-ms-wax" />
-                <map from="wmv" to="video/x-ms-wmv" />
-                <map from="wvx" to="video/x-ms-wvx" />
-                <map from="wm" to="video/x-ms-wm" />
-                <map from="wmx" to="video/x-ms-wmx" />
-                <map from="m3u" to="audio/x-mpegurl" />
-                <map from="pls" to="audio/x-scpls" />
-                <map from="flv" to="video/x-flv" />
-                <map from="mkv" to="video/x-matroska" />
-                <map from="mka" to="audio/x-matroska" />
-                <map from="dsf" to="audio/x-dsd" />
-                <map from="dff" to="audio/x-dsd" />
-                <map from="wv" to="audio/x-wavpack" />
+                <map from="mp3" to="audio/mpeg"/>
+                <map from="mp4" to="video/mpeg"/>
+                <map from="m4a" to="audio/mpeg"/>
+                <map from="ogx" to="application/ogg"/>
+                <map from="ogv" to="video/ogg"/>
+                <map from="oga" to="audio/ogg"/>
+                <map from="ogg" to="audio/ogg"/>
+                <map from="ogm" to="video/ogg"/>
+                <map from="asf" to="video/x-ms-asf"/>
+                <map from="asx" to="video/x-ms-asf"/>
+                <map from="wma" to="audio/x-ms-wma"/>
+                <map from="wax" to="audio/x-ms-wax"/>
+                <map from="wmv" to="video/x-ms-wmv"/>
+                <map from="wvx" to="video/x-ms-wvx"/>
+                <map from="wm" to="video/x-ms-wm"/>
+                <map from="wmx" to="video/x-ms-wmx"/>
+                <map from="m3u" to="audio/x-mpegurl"/>
+                <map from="pls" to="audio/x-scpls"/>
+                <map from="flv" to="video/x-flv"/>
+                <map from="mkv" to="video/x-matroska"/>
+                <map from="mka" to="audio/x-matroska"/>
+                <map from="dsf" to="audio/x-dsd"/>
+                <map from="dff" to="audio/x-dsd"/>
+                <map from="wv" to="audio/x-wavpack"/>
                 <!-- Uncomment the line below for PS3 divx support -->
                 <!-- <map from="avi" to="video/divx" /> -->
                 <!-- Uncomment the line below for D-Link DSM / ZyXEL DMA-1000 -->
                 <!-- <map from="avi" to="video/avi" /> -->
             </extension-mimetype>
             <mimetype-upnpclass>
-                <map from="audio/*" to="object.item.audioItem.musicTrack" />
-                <map from="video/*" to="object.item.videoItem" />
-                <map from="image/*" to="object.item.imageItem" />
-                <map from="application/ogg" to="object.item.audioItem.musicTrack" />
+                <map from="audio/*" to="object.item.audioItem.musicTrack"/>
+                <map from="video/*" to="object.item.videoItem"/>
+                <map from="image/*" to="object.item.imageItem"/>
+                <map from="application/ogg" to="object.item.audioItem.musicTrack"/>
             </mimetype-upnpclass>
             <mimetype-contenttype>
-                <treat mimetype="audio/mpeg" as="mp3" />
-                <treat mimetype="application/ogg" as="ogg" />
-                <treat mimetype="audio/ogg" as="ogg" />
-                <treat mimetype="audio/x-flac" as="flac" />
-                <treat mimetype="audio/flac" as="flac" />
-                <treat mimetype="audio/x-ms-wma" as="wma" />
-                <treat mimetype="audio/x-wavpack" as="wv" />
-                <treat mimetype="image/jpeg" as="jpg" />
-                <treat mimetype="audio/x-mpegurl" as="playlist" />
-                <treat mimetype="audio/x-scpls" as="playlist" />
-                <treat mimetype="audio/x-wav" as="pcm" />
-                <treat mimetype="audio/L16" as="pcm" />
-                <treat mimetype="video/x-msvideo" as="avi" />
-                <treat mimetype="video/mp4" as="mp4" />
-                <treat mimetype="audio/mp4" as="mp4" />
-                <treat mimetype="video/x-matroska" as="mkv" />
-                <treat mimetype="audio/x-matroska" as="mka" />
-                <treat mimetype="audio/x-dsd" as="dsd" />
+                <treat mimetype="audio/mpeg" as="mp3"/>
+                <treat mimetype="application/ogg" as="ogg"/>
+                <treat mimetype="audio/ogg" as="ogg"/>
+                <treat mimetype="audio/x-flac" as="flac"/>
+                <treat mimetype="audio/flac" as="flac"/>
+                <treat mimetype="audio/x-ms-wma" as="wma"/>
+                <treat mimetype="audio/x-wavpack" as="wv"/>
+                <treat mimetype="image/jpeg" as="jpg"/>
+                <treat mimetype="audio/x-mpegurl" as="playlist"/>
+                <treat mimetype="audio/x-scpls" as="playlist"/>
+                <treat mimetype="audio/x-wav" as="pcm"/>
+                <treat mimetype="audio/L16" as="pcm"/>
+                <treat mimetype="video/x-msvideo" as="avi"/>
+                <treat mimetype="video/mp4" as="mp4"/>
+                <treat mimetype="audio/mp4" as="m4a"/>
+                <treat mimetype="video/x-matroska" as="mkv"/>
+                <treat mimetype="audio/x-matroska" as="mka"/>
+                <treat mimetype="audio/x-dsd" as="dsd"/>
             </mimetype-contenttype>
         </mappings>
         <online-content></online-content>
     </import>
-    <transcoding enables="no" />
+    <transcoding enables="no"/>
 </config>
