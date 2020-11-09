@@ -4,7 +4,7 @@ services:
     build: ./gerbera
     volumes:
       - ./gerbera/config:/root/.config/gerbera
-      - ~/srv/movie:/srv/movie:ro
+      - /srv/movie:/srv/movie:ro
     network_mode: host
     restart: always
     logging:
