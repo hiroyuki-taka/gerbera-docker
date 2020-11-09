@@ -11,7 +11,7 @@ RUN apk add --no-cache tini \
 	    util-linux-dev sqlite-dev mariadb-connector-c-dev cmake zlib-dev fmt-dev \
 	    file-dev libexif-dev curl-dev ffmpeg-dev ffmpegthumbnailer-dev wget xz \
 	    libmatroska-dev libebml-dev taglib-dev git && \
-    git clone https://github.com/gerbera/gerbera.git -b v1.6.1 && \
+    git clone https://github.com/gerbera/gerbera.git -b v1.6.4 && \
     mkdir build && \
     cd build && \
     sh ../gerbera/scripts/install-pugixml.sh && \
