@@ -27,7 +27,7 @@
                 <database>gerbera</database>
             </mysql>
         </storage>
-	<protocolInfo extend="yes" />
+        <protocolInfo extend="yes"/>
         <extended-runtime-options>
             <ffmpegthumbnailer enabled="yes">
                 <thumbnail-size>128</thumbnail-size>
