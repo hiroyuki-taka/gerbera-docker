@@ -62,6 +62,10 @@
             <subtitle>
                 <add-file name="%filename%.ass"/>
             </subtitle>
+            <resource>
+                <add-file name="%filename%.ass"/>
+                <add-file name="%filename%-cm.mp4" />
+            </resource>
         </resources>
         <mappings>
             <extension-mimetype ignore-unknown="no">
