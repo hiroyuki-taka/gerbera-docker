@@ -6,16 +6,11 @@
 /*!***********************!*\
   !*** ./src/common.ts ***!
   \***********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports) => {
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getPlaylistType": () => (/* binding */ getPlaylistType),
-/* harmony export */   "escapeSlash": () => (/* binding */ escapeSlash),
-/* harmony export */   "getLastPath": () => (/* binding */ getLastPath),
-/* harmony export */   "getRootPath": () => (/* binding */ getRootPath),
-/* harmony export */   "createContainerChain": () => (/* binding */ createContainerChain)
-/* harmony export */ });
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createContainerChain = exports.getRootPath = exports.getLastPath = exports.escapeSlash = exports.getPlaylistType = void 0;
 function getPlaylistType(mimetype) {
     if (mimetype === 'audio/x-mpegurl') {
         return 'm3u';
@@ -25,9 +20,11 @@ function getPlaylistType(mimetype) {
     }
     return '';
 }
+exports.getPlaylistType = getPlaylistType;
 function escapeSlash(name) {
     return name.replace(/\\/g, '\\\\').replace(/\//g, '\\/');
 }
+exports.escapeSlash = escapeSlash;
 function getLastPath(location) {
     var p = location.split('/');
     if (p.length > 1 && p[p.length - 2]) {
@@ -37,6 +34,7 @@ function getLastPath(location) {
         return '';
     }
 }
+exports.getLastPath = getLastPath;
 function getRootPath(rootPath, location) {
     if (rootPath && rootPath.length > 0) {
         var r = rootPath.substring(0, rootPath.lastIndexOf('/'));
@@ -56,77 +54,23 @@ function getRootPath(rootPath, location) {
     }
     return [];
 }
+exports.getRootPath = getRootPath;
 function createContainerChain(arr) {
     return arr.map(function (s) { return escapeSlash(s); }).join('/');
 }
+exports.createContainerChain = createContainerChain;
 
 
-/***/ })
+/***/ }),
 
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
+/***/ "./src/import.ts":
 /*!***********************!*\
   !*** ./src/import.ts ***!
   \***********************/
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _common__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common */ "./src/common.ts");
-var __assign = (undefined && undefined.__assign) || function () {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
             s = arguments[i];
@@ -137,14 +81,15 @@ var __assign = (undefined && undefined.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArrays = (undefined && undefined.__spreadArrays) || function () {
+var __spreadArrays = (this && this.__spreadArrays) || function () {
     for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
     for (var r = Array(s), k = 0, i = 0; i < il; i++)
         for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
             r[k] = a[j];
     return r;
 };
-
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+var common_1 = __webpack_require__(/*! ./common */ "./src/common.ts");
 function addAudio(obj) {
     var desc = [];
     var artist_full;
@@ -172,14 +117,14 @@ function addAudio(obj) {
 }
 function addVideo(obj) {
     print('addVideo', JSON.stringify(obj));
-    addCdsObject(obj, (0,_common__WEBPACK_IMPORTED_MODULE_0__.createContainerChain)(['Video', 'All Video']));
-    var dir = (0,_common__WEBPACK_IMPORTED_MODULE_0__.getRootPath)(object_script_path, obj.location);
+    addCdsObject(obj, common_1.createContainerChain(['Video', 'All Video']));
+    var dir = common_1.getRootPath(object_script_path, obj.location);
     if (dir.length > 0) {
         var chain = __spreadArrays(['Video', 'Directories'], dir);
-        addCdsObject(obj, (0,_common__WEBPACK_IMPORTED_MODULE_0__.createContainerChain)(chain));
+        addCdsObject(obj, common_1.createContainerChain(chain));
     }
 }
-if ((0,_common__WEBPACK_IMPORTED_MODULE_0__.getPlaylistType)(orig.mimetype) === '') {
+if (common_1.getPlaylistType(orig.mimetype) === '') {
     var arr = orig.mimetype.split('/');
     var mime = arr[0];
     var obj = __assign(__assign({}, orig), { refID: orig.id });
@@ -202,7 +147,40 @@ if ((0,_common__WEBPACK_IMPORTED_MODULE_0__.getPlaylistType)(orig.mimetype) === 
     }
 }
 
-})();
 
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		if(__webpack_module_cache__[moduleId]) {
+/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/import.ts");
+/******/ 	
 /******/ })()
 ;
