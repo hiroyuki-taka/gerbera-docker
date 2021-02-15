@@ -9,7 +9,7 @@
 /***/ ((__unused_webpack_module, exports) => {
 
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.__esModule = true;
 exports.createContainerChain = exports.getRootPath = exports.getLastPath = exports.escapeSlash = exports.getPlaylistType = void 0;
 function getPlaylistType(mimetype) {
     if (mimetype === 'audio/x-mpegurl') {
@@ -88,7 +88,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
-Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.__esModule = true;
 var common_1 = __webpack_require__(/*! ./common */ "./src/common.ts");
 function addAudio(obj) {
     var desc = [];
