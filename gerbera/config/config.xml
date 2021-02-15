@@ -43,7 +43,7 @@
             </mark-played-items>
         </extended-runtime-options>
     </server>
-    <import hidden-files="no">
+    <import hidden-files="no" follow-symlinks="yes">
         <filesystem-charset>UTF-8</filesystem-charset>
         <metadata-charset>UTF-8</metadata-charset>
         <scripting script-charset="UTF-8">
@@ -52,11 +52,11 @@
             </virtual-layout>
         </scripting>
         <autoscan use-notiry="auto">
-            <directory location="/srv/movie" mode="timed" interval="3600" recursive="yes" hidden-files="no"/>
+            <directory location="/srv/movie_kana" mode="timed" interval="3600" recursive="yes" hidden-files="no"/>
         </autoscan>
-        <layout parent-path="yes">
+        <layout parent-path="no">
             <path from="([0-9]{4})(.Q) (.*)" to="Year/$1/$2/$3"/>
-            <path from="([0-9]{4})([0-9]{2}) (.*)" to="Year/$1/$2/$3"/>
+	    <path from="movie_kana/(.)" to="Initial/$1" />
         </layout>
         <resources case-sensitive="yes">
             <subtitle>
