@@ -47,8 +47,8 @@
         <filesystem-charset>UTF-8</filesystem-charset>
         <metadata-charset>UTF-8</metadata-charset>
         <scripting script-charset="UTF-8">
-            <virtual-layout type="builtin">
-                <import-script>/usr/local/share/gerbera/js/import.js</import-script>
+            <virtual-layout type="js">
+                <import-script>/root/.config/scripts/build/import.js</import-script>
             </virtual-layout>
         </scripting>
         <autoscan use-notiry="auto">

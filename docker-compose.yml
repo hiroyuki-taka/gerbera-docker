@@ -4,6 +4,7 @@ services:
     build: ./gerbera
     volumes:
       - ./gerbera/config:/root/.config/gerbera
+      - ./gerbera/scripts:/root/.config/scripts
       - /srv/movie:/srv/movie:ro
       - /srv/movie_kana:/srv/movie_kana:ro
     network_mode: host
