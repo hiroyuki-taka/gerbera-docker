@@ -1,186 +1,60 @@
-/******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ({
+(() => {
+    "use strict";
+    var t = {
+        200: (t, e) => {
+            function r(t) {
+                return t.replace(/\\/g, "\\\\").replace(/\//g, "\\/")
+            }
 
-/***/ "./src/common.ts":
-/*!***********************!*\
-  !*** ./src/common.ts ***!
-  \***********************/
-/***/ ((__unused_webpack_module, exports) => {
+            function n(t) {
+                var e = t.split("/");
+                return e.length > 1 && e[e.length - 2] ? e[e.length - 2] : ""
+            }
 
-
-exports.__esModule = true;
-exports.createContainerChain = exports.getRootPath = exports.getLastPath = exports.escapeSlash = exports.getPlaylistType = void 0;
-function getPlaylistType(mimetype) {
-    if (mimetype === 'audio/x-mpegurl') {
-        return 'm3u';
-    }
-    if (mimetype === 'audio/x-scpls') {
-        return 'pls';
-    }
-    return '';
-}
-exports.getPlaylistType = getPlaylistType;
-function escapeSlash(name) {
-    return name.replace(/\\/g, '\\\\').replace(/\//g, '\\/');
-}
-exports.escapeSlash = escapeSlash;
-function getLastPath(location) {
-    var p = location.split('/');
-    if (p.length > 1 && p[p.length - 2]) {
-        return p[p.length - 2];
-    }
-    else {
-        return '';
-    }
-}
-exports.getLastPath = getLastPath;
-function getRootPath(rootPath, location) {
-    if (rootPath && rootPath.length > 0) {
-        var r = rootPath.substring(0, rootPath.lastIndexOf('/'));
-        var dir = location.substring(r.length, location.lastIndexOf('/'));
-        if (dir.charAt(0) === '/') {
-            return dir.substring(1).split('/');
+            e.__esModule = !0, e.createContainerChain = e.getRootPath = e.getLastPath = e.escapeSlash = e.getPlaylistType = void 0, e.getPlaylistType = function (t) {
+                return "audio/x-mpegurl" === t ? "m3u" : "audio/x-scpls" === t ? "pls" : ""
+            }, e.escapeSlash = r, e.getLastPath = n, e.getRootPath = function (t, e) {
+                if (t && t.length > 0) {
+                    var i = t.substring(0, t.lastIndexOf("/"));
+                    return "/" === (a = e.substring(i.length, e.lastIndexOf("/"))).charAt(0) ? a.substring(1).split("/") : a.split("/")
+                }
+                var a;
+                return "" !== (a = n(e)) ? [r(a)] : []
+            }, e.createContainerChain = function (t) {
+                return t.map((function (t) {
+                    return r(t)
+                })).join("/")
+            }
+        }, 121: function (t, e, r) {
+            var n = this && this.__assign || function () {
+                return (n = Object.assign || function (t) {
+                    for (var e, r = 1, n = arguments.length; r < n; r++) for (var i in e = arguments[r]) Object.prototype.hasOwnProperty.call(e, i) && (t[i] = e[i]);
+                    return t
+                }).apply(this, arguments)
+            }, i = this && this.__spreadArrays || function () {
+                for (var t = 0, e = 0, r = arguments.length; e < r; e++) t += arguments[e].length;
+                var n = Array(t), i = 0;
+                for (e = 0; e < r; e++) for (var a = arguments[e], o = 0, s = a.length; o < s; o++, i++) n[i] = a[o];
+                return n
+            };
+            e.__esModule = !0;
+            var a = r(200);
+            if ("" === a.getPlaylistType(orig.mimetype)) {
+                var o = orig.mimetype.split("/")[0], s = n(n({}, orig), {refID: orig.id});
+                "video" === o && (s.onlineservice === ONLINE_SERVICE_APPLE_TRAILERS || function (t) {
+                    print("addVideo", JSON.stringify(t)), addCdsObject(t, a.createContainerChain(["Video", "All Video"]));
+                    var e = a.getRootPath(object_script_path, t.location);
+                    if (e.length > 0) {
+                        var r = i(["Video", "Directories"], e);
+                        addCdsObject(t, a.createContainerChain(r))
+                    }
+                }(s)), "application/ogg" === orig.mimetype && orig.theora
+            }
         }
-        else {
-            return dir.split('/');
-        }
-    }
-    else {
-        var dir = getLastPath(location);
-        if (dir !== '') {
-            return [escapeSlash(dir)];
-        }
-    }
-    return [];
-}
-exports.getRootPath = getRootPath;
-function createContainerChain(arr) {
-    return arr.map(function (s) { return escapeSlash(s); }).join('/');
-}
-exports.createContainerChain = createContainerChain;
-
-
-/***/ }),
-
-/***/ "./src/import.ts":
-/*!***********************!*\
-  !*** ./src/import.ts ***!
-  \***********************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
-exports.__esModule = true;
-var common_1 = __webpack_require__(/*! ./common */ "./src/common.ts");
-function addAudio(obj) {
-    var desc = [];
-    var artist_full;
-    var album_full;
-    var title = obj.meta[M_TITLE] || obj.title;
-    var artist = obj.meta[M_ARTIST];
-    if (artist) {
-        artist_full = artist;
-        desc.push(artist);
-    }
-    else {
-        artist = 'Unknown';
-        artist_full = null;
-    }
-    var album = obj.meta[M_ALBUM];
-    if (album) {
-        album_full = album;
-        desc.push(album);
-    }
-    else {
-        album = 'Unknown';
-        album_full = null;
-    }
-    desc.push(title);
-}
-function addVideo(obj) {
-    print('addVideo', JSON.stringify(obj));
-    addCdsObject(obj, common_1.createContainerChain(['Video', 'All Video']));
-    var dir = common_1.getRootPath(object_script_path, obj.location);
-    if (dir.length > 0) {
-        var chain = __spreadArrays(['Video', 'Directories'], dir);
-        addCdsObject(obj, common_1.createContainerChain(chain));
-    }
-}
-if (common_1.getPlaylistType(orig.mimetype) === '') {
-    var arr = orig.mimetype.split('/');
-    var mime = arr[0];
-    var obj = __assign(__assign({}, orig), { refID: orig.id });
-    if (mime === 'audio') {
-    }
-    if (mime === 'video') {
-        if (obj.onlineservice === ONLINE_SERVICE_APPLE_TRAILERS) {
-        }
-        else {
-            addVideo(obj);
-        }
-    }
-    if (mime === 'video') {
-    }
-    if (orig.mimetype === 'application/ogg') {
-        if (orig.theora === 1) {
-        }
-        else {
-        }
-    }
-}
-
-
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/import.ts");
-/******/ 	
-/******/ })()
-;
+    }, e = {};
+    !function r(n) {
+        if (e[n]) return e[n].exports;
+        var i = e[n] = {exports: {}};
+        return t[n].call(i.exports, i, i.exports, r), i.exports
+    }(121)
+})();

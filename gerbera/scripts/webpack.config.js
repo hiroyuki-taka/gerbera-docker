@@ -4,7 +4,7 @@ module.exports = env => {
     return [
         {
             name: 'default',
-            mode: 'development',
+            mode: 'production',
             devtool: false,
             entry: {
                 'import': './src/import.ts'
