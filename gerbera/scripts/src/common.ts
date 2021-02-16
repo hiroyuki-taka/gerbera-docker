@@ -41,5 +41,5 @@ export function getRootPath(rootPath: string | null, location: string): string[]
 }
 
 export function createContainerChain(arr: string[]): string {
-    return arr.map(s => escapeSlash(s)).join('/')
+    return '/' + (arr.map(s => escapeSlash(s)).join('/'))
 }
