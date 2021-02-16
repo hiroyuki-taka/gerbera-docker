@@ -10,7 +10,7 @@ export function getPlaylistType(mimetype: string) {
 }
 
 export function escapeSlash(name): string {
-    return name.replace(/\\/g, '\\\\').replace(/\//g, '\\/')
+    return name.replace(/\\/g, "\\\\").replace(/\//g, "\\/")
 }
 
 export function getLastPath(location: string) {

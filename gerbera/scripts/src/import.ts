@@ -90,6 +90,9 @@ function addVideo(obj: Orig) {
         const subtitle = found[5]
 
         obj.title = subtitle
+        print(createContainerChain(['Video', 'Directories', container, title]), obj.title)
+        print(createContainerChain(['Video', 'Season', year, season, title]), obj.title)
+
         addCdsObject(obj, createContainerChain(['Video', 'Directories', container, title]))
         addCdsObject(obj, createContainerChain(['Video', 'Season', year, season, title]))
     }
