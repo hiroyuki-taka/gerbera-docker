@@ -75,13 +75,16 @@ function addAudio(obj: Orig) {
 }
 
 function addVideo(obj: Orig) {
-    print('addVideo', JSON.stringify(obj))
 
     addCdsObject(obj, createContainerChain(['Video', 'All Video']))
 
-    const dir = getRootPath(object_script_path, obj.location)
-    if (dir.length > 0) {
-        const chain = ['Video', 'Directories', ...dir]
+    const regex = /.*\/(?<container>.)\/[0-9]{4}[1-4]Q (?<title>.*)\/(?<subtitle>.*)\.mp4$/
+    const found = obj.location.match(regex)
+
+    print('addVideo', JSON.stringify(found))
+    if (found) {
+        obj.title = found.groups.subtitle
+        const chain = ['Video', 'Directories', found.groups.container, found.groups.title]
         addCdsObject(obj, createContainerChain(chain))
     }
 }
