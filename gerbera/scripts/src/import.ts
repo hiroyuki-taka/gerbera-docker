@@ -74,14 +74,15 @@ function addAudio(obj: Orig) {
     desc.push(title)
 }
 
-const regex = /.*\/(.)\/([0-9]{4})([1-4]Q) (.*)\/(.*)\.mp4$/
+const regex = /.*\/(.)\/([0-9]{4})([1-4]Q) (.*)\/(.*)([0-9]{4}年[0-9]{2}月[0-9]{2}日[0-9]{2}時[0-9]{2}分)?(-.*)?\.mp4$/
 
 function addVideo(obj: Orig) {
     addCdsObject(obj, createContainerChain(['Video', 'All Video']))
 
     const found = obj.location.match(regex)
 
-    print('addVideo', JSON.stringify(found))
+    print('addVideo', obj.location, JSON.stringify(found))
+
     if (found) {
         const container = found[1]
         const year = found[2]
