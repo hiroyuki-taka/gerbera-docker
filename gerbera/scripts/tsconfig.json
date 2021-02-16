@@ -2,11 +2,11 @@
   "compilerOptions": {
     "declaration": true,
     "sourceMap": true,
-    "target": "ES3",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "target": "ES5",
+    "module": "es2015",
     "outDir": "dist",
     "rootDir": "src",
+    "removeComments": true,
     "typeRoots": [
       "node_modules/@types"
     ]

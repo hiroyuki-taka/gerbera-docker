@@ -1,28 +1,37 @@
-const path = require("path")
+const path = require('path')
+const TerserPlugin = require('terser-webpack-plugin')
 
-module.exports = env => {
-    return [
-        {
-            name: 'default',
-            mode: 'production',
-            devtool: false,
-            entry: {
-                'import': './src/import.ts'
-            },
-            output: {
-                publicPath: 'build',
-                filename: '[name].js',
-                chunkFilename: 'module-[name].bundle.js',
-                path: path.resolve(__dirname, 'build')
-            },
-            module: {
-                rules: [
-                    {test: /\.ts$/, use: [{loader: 'ts-loader'}]}
-                ]
-            },
-            resolve: {
-                extensions: ['.ts', 'js']
+const config = {
+    mode: 'development',
+    devtool: 'source-map',
+    entry: {
+        'import': './src/import.ts'
+    },
+    output: {
+        publicPath: 'build',
+        filename: '[name].js',
+        chunkFilename: 'module-[name].bundle.js',
+        path: path.resolve(__dirname, 'build')
+    },
+    module: {
+        rules: [
+            {test: /\.ts$/, use: [{loader: 'ts-loader'}]}
+        ]
+    },
+    resolve: {
+        extensions: ['.ts', 'js']
+    },
+    target: ['es5'],
+    optimization: {
+        minimize: true,
+        minimizer: [new TerserPlugin({
+            parallel: true,
+            terserOptions: {
+                ie8: true,
+                toplevel: true
             }
-        }
-    ]
+        })]
+    }
 }
+
+module.exports = config
