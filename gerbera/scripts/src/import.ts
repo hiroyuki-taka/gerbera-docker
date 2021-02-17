@@ -74,14 +74,14 @@ function addAudio(obj: Orig) {
     desc.push(title)
 }
 
-const regex = /.*\/(.)\/([0-9]{4})([1-4]Q) (.*)\/(.*)([0-9]{4}年[0-9]{2}月[0-9]{2}日[0-9]{2}時[0-9]{2}分)?(-.*)?\.mp4$/
+const regex = /.*\/(.)\/([0-9]{4})([1-4]Q) (.*)\/(.*)(-[0-9]+年[0-9]+月[0-9]+日[0-9]+時[0-9]+分)?(-.*)?\.mp4$/
 
 function addVideo(obj: Orig) {
     addCdsObject(obj, createContainerChain(['Video', 'All Video']))
 
     const found = obj.location.match(regex)
 
-    print('addVideo', obj.location, JSON.stringify(found))
+    print('addVideo', object_script_path, obj.location, JSON.stringify(found))
 
     if (found) {
         const container = found[1]
@@ -90,12 +90,9 @@ function addVideo(obj: Orig) {
         const title = found[4]
         const subtitle = found[5]
 
-        obj.title = subtitle
-        print(createContainerChain(['Video', 'Directories', container, title]), obj.title)
-        print(createContainerChain(['Video', 'Season', year, season, title]), obj.title)
-
-        addCdsObject(obj, createContainerChain(['Video', 'Directories', container, title]))
-        addCdsObject(obj, createContainerChain(['Video', 'Season', year, season, title]))
+        addCdsObject({...obj, title: subtitle}, createContainerChain(['Video', 'Title', title]))
+        addCdsObject({...obj, title: subtitle}, createContainerChain(['Video', 'Directories', container, title]))
+        addCdsObject({...obj, title: subtitle}, createContainerChain(['Video', 'Season', year, season, title]))
     }
 }
 
