@@ -81,7 +81,7 @@ function addVideo(obj: Orig) {
 
     const found = obj.location.match(regex)
 
-    print('addVideo', object_script_path, obj.location, JSON.stringify(found))
+    print('addVideo', JSON.stringify(found))
 
     if (found) {
         const container = found[1]
@@ -92,12 +92,12 @@ function addVideo(obj: Orig) {
         const airtime = found[6]
         const is_cm = found[7] === '-cm'
 
-        obj = {...obj, title: subtitle}
         if (is_cm) {
             addCdsObject(obj, createContainerChain(['Video', 'Title', title, 'CM']))
             addCdsObject(obj, createContainerChain(['Video', 'Directories', container, title, 'CM']))
             addCdsObject(obj, createContainerChain(['Video', 'Season', year, season, title, 'CM']))
         } else {
+            obj = {...obj, title: subtitle}
             addCdsObject(obj, createContainerChain(['Video', 'Title', title]))
             addCdsObject(obj, createContainerChain(['Video', 'Directories', container, title]))
             addCdsObject(obj, createContainerChain(['Video', 'Season', year, season, title]))
