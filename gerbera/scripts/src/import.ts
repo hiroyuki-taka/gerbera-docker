@@ -74,7 +74,7 @@ function addAudio(obj: Orig) {
     desc.push(title)
 }
 
-const regex = /.*\/(.)\/([0-9]{4})([1-4]Q) (.*)\/(.*?)(-[0-9]+年[0-9]+月[0-9]+日[0-9]+時[0-9]+分)?(-.*)?\.mp4$/
+const regex = /.*\/(.)\/([0-9]{4})([1-4]Q) (.*)\/(.*?)(-[0-9]+年[0-9]+月[0-9]+日[0-9]+時[0-9]+分)?(-cm)?\.mp4$/
 
 function addVideo(obj: Orig) {
     addCdsObject(obj, createContainerChain(['Video', 'All Video']))
@@ -92,10 +92,15 @@ function addVideo(obj: Orig) {
         const airtime = found[6]
         const is_cm = found[7] === '-cm'
 
-        if (!is_cm) {
-            addCdsObject({...obj, title: subtitle}, createContainerChain(['Video', 'Title', title]))
-            addCdsObject({...obj, title: subtitle}, createContainerChain(['Video', 'Directories', container, title]))
-            addCdsObject({...obj, title: subtitle}, createContainerChain(['Video', 'Season', year, season, title]))
+        obj = {...obj, title: subtitle}
+        if (is_cm) {
+            addCdsObject(obj, createContainerChain(['Video', 'Title', title, 'CM']))
+            addCdsObject(obj, createContainerChain(['Video', 'Directories', container, title, 'CM']))
+            addCdsObject(obj, createContainerChain(['Video', 'Season', year, season, title, 'CM']))
+        } else {
+            addCdsObject(obj, createContainerChain(['Video', 'Title', title]))
+            addCdsObject(obj, createContainerChain(['Video', 'Directories', container, title]))
+            addCdsObject(obj, createContainerChain(['Video', 'Season', year, season, title]))
         }
     }
 }
