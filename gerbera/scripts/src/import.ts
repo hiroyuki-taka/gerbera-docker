@@ -77,11 +77,10 @@ function addAudio(obj: Orig) {
 const regex = /.*\/(.)\/([0-9]{4})([1-4]Q) (.*)\/(.*?)(-[0-9]+年[0-9]+月[0-9]+日[0-9]+時[0-9]+分)?(-cm)?\.mp4$/
 
 function addVideo(obj: Orig) {
-    addCdsObject(obj, createContainerChain(['Video', 'All Video']))
 
     const found = obj.location.match(regex)
 
-    print('addVideo', JSON.stringify(found))
+    print('addVideo', JSON.stringify(obj))
 
     if (found) {
         const container = found[1]
@@ -91,6 +90,8 @@ function addVideo(obj: Orig) {
         const subtitle = found[5]
         const airtime = found[6]
         const is_cm = found[7] === '-cm'
+
+        addCdsObject(obj, createContainerChain(['Video', 'All Video', `${year}${season} ${title}`]))
 
         if (is_cm) {
             addCdsObject(obj, createContainerChain(['Video', 'Title', title, 'CM']))
