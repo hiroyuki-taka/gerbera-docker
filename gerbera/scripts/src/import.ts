@@ -83,18 +83,11 @@ function addVideo(obj: Orig) {
     print('addVideo', found)
 
     if (found) {
-        const container = found[1]
-        const year = found[2]
-        const season = found[3]
-        const title = found[4]
-        const subtitle = found[5]
-        const airtime = found[6]
-        const is_cm = found[7] === '-cm'
+        const [full, container, year, season, title, subtitle, airtime, is_cm] = found
 
-        print(createContainerChain(['Video', 'All Video', `${year}${season} ${title}`]))
-        addCdsObject({...obj}, createContainerChain(['Video', 'All Video', `${year}${season} ${title}`]))
+        // addCdsObject({...obj}, createContainerChain(['Video', 'All Video', `${year}${season} ${title}`]))
 
-        if (is_cm) {
+        if (is_cm === '-cm') {
             addCdsObject({...obj}, createContainerChain(['Video', 'Title', title, 'CM']))
             addCdsObject({...obj}, createContainerChain(['Video', 'Directories', container, title, 'CM']))
             addCdsObject({...obj}, createContainerChain(['Video', 'Season', year, season, title, 'CM']))
