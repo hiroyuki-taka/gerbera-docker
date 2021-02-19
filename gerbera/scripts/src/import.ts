@@ -80,7 +80,7 @@ function addVideo(obj: Orig) {
 
     const found = obj.location.match(regex)
 
-    print('addVideo', JSON.stringify(obj))
+    print('addVideo', found)
 
     if (found) {
         const container = found[1]
@@ -91,17 +91,18 @@ function addVideo(obj: Orig) {
         const airtime = found[6]
         const is_cm = found[7] === '-cm'
 
-        addCdsObject(obj, createContainerChain(['Video', 'All Video', `${year}${season} ${title}`]))
+        print(createContainerChain(['Video', 'All Video', `${year}${season} ${title}`]))
+        addCdsObject({...obj}, createContainerChain(['Video', 'All Video', `${year}${season} ${title}`]))
 
         if (is_cm) {
-            addCdsObject(obj, createContainerChain(['Video', 'Title', title, 'CM']))
-            addCdsObject(obj, createContainerChain(['Video', 'Directories', container, title, 'CM']))
-            addCdsObject(obj, createContainerChain(['Video', 'Season', year, season, title, 'CM']))
+            addCdsObject({...obj}, createContainerChain(['Video', 'Title', title, 'CM']))
+            addCdsObject({...obj}, createContainerChain(['Video', 'Directories', container, title, 'CM']))
+            addCdsObject({...obj}, createContainerChain(['Video', 'Season', year, season, title, 'CM']))
         } else {
             obj = {...obj, title: subtitle}
-            addCdsObject(obj, createContainerChain(['Video', 'Title', title]))
-            addCdsObject(obj, createContainerChain(['Video', 'Directories', container, title]))
-            addCdsObject(obj, createContainerChain(['Video', 'Season', year, season, title]))
+            addCdsObject({...obj}, createContainerChain(['Video', 'Title', title]))
+            addCdsObject({...obj}, createContainerChain(['Video', 'Directories', container, title]))
+            addCdsObject({...obj}, createContainerChain(['Video', 'Season', year, season, title]))
         }
     }
 }
