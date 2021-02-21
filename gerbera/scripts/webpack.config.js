@@ -2,7 +2,7 @@ const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
 
 const config = {
-    mode: 'development',
+    mode: 'production',
     devtool: 'source-map',
     entry: {
         'import': './src/import.ts'
@@ -21,17 +21,7 @@ const config = {
     resolve: {
         extensions: ['.ts', 'js']
     },
-    target: ['es5'],
-    optimization: {
-        minimize: true,
-        minimizer: [new TerserPlugin({
-            parallel: true,
-            terserOptions: {
-                ie8: true,
-                toplevel: true
-            }
-        })]
-    }
+    target: ['es5']
 }
 
 module.exports = config
