@@ -84,6 +84,10 @@ function addVideo(obj: Orig) {
 
     if (found) {
         const [full, container, year, season, title, subtitle, airtime, is_cm] = found
+        if (airtime) {
+            obj.meta[M_DATE] = airtime.replace(/-([0-9]+)年([0-9]+)月([0-9]+)日[0-9]+時[0-9]+分/, '$1-$2-$3')
+            print(obj.meta)
+        }
 
         // addCdsObject({...obj}, createContainerChain(['Video', 'All Video', `${year}${season} ${title}`]))
 
