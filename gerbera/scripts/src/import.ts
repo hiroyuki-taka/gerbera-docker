@@ -74,7 +74,7 @@ function addAudio(obj: Orig) {
     desc.push(title)
 }
 
-const regex = /.*\/(.)\/([0-9]{4})([1-4]Q) (.*)\/(.*?)(-[0-9]+年[0-9]+月[0-9]+日[0-9]+時[0-9]+分)?(-cm)?\.mp4$/
+const regex = /.*\/(.)\/([0-9]{4})([0-4]Q) (.*)\/(.*?)(-[0-9]+年[0-9]+月[0-9]+日[0-9]+時[0-9]+分)?(-cm)?\.mp4$/
 
 function addVideo(obj: Orig) {
 
