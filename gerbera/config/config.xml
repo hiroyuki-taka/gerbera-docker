@@ -35,7 +35,7 @@
                 <workaround-bugs>no</workaround-bugs>
                 <image-quality>8</image-quality>
             </ffmpegthumbnailer>
-            <mark-played-items enabled="yes" suppress-cds-updates="yes">
+            <mark-played-items enabled="no" suppress-cds-updates="yes">
                 <string mode="append">*</string>
                 <mark>
                     <content>video</content>
@@ -51,8 +51,8 @@
                 <import-script>/root/.config/scripts/build/import.js</import-script>
             </virtual-layout>
         </scripting>
-        <autoscan use-notiry="auto">
-            <directory location="/srv/movie_kana" mode="timed" interval="3600" recursive="yes" hidden-files="no"/>
+        <autoscan use-inotiry="auto">
+            <directory location="/srv/movie_kana" mode="timed" interval="1800" recursive="yes" hidden-files="no"/>
         </autoscan>
         <layout parent-path="no">
             <path from="([0-9]{4})(.Q) (.*)" to="Year/$1/$2/$3"/>
