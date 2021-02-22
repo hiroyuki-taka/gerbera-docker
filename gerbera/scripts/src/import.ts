@@ -1,5 +1,4 @@
 import {createContainerChain, getPlaylistType, getRootPath} from "./common";
-import {DateTime} from "luxon";
 
 declare const object_script_path: string
 
@@ -85,26 +84,24 @@ function addVideo(obj: Orig) {
 
     if (found) {
         const [full, container, year, season, title, subtitle, airtime, is_cm] = found
-        let m_date: DateTime
 
         if (airtime) {
-            m_date = DateTime.fromFormat(airtime, '-yyyy年MM月dd日HH時mm分')
+            obj.meta[M_DATE] = airtime.replace(/-([0-9]+)年([0-9]+)月([0-9]+)日[0-9]+時[0-9]+分/, '$1-$2-$3')
         } else {
             switch (season) {
                 case '1Q':
-                    m_date = DateTime.local(Number(year), 1, 1)
+                    obj.meta[M_DATE] = `${year}-01-01`
                     break
                 case '2Q':
-                    m_date = DateTime.local(Number(year), 4, 1)
+                    obj.meta[M_DATE] = `${year}-04-01`
                     break
                 case '3Q':
-                    m_date = DateTime.local(Number(year), 7, 1)
+                    obj.meta[M_DATE] = `${year}-07-01`
                     break
                 case '4Q':
-                    m_date = DateTime.local(Number(year), 10, 1)
+                    obj.meta[M_DATE] = `${year}-10-01`
             }
         }
-        obj.meta[M_DATE] = m_date.toISODate()
         print(JSON.stringify(obj.meta))
 
         // addCdsObject({...obj}, createContainerChain(['Video', 'All Video', `${year}${season} ${title}`]))
