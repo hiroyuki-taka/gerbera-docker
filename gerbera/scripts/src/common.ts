@@ -5,8 +5,11 @@ export function getPlaylistType(mimetype: string) {
     if (mimetype === 'audio/x-scpls') {
         return 'pls'
     }
-    return ''
+    if (mimetype == 'video/x-ms-asf' || mimetype === 'video/x-ms-asx') {
+        return 'asx';
+    }
 
+    return ''
 }
 
 export function escapeSlash(name): string {

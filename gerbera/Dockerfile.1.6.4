@@ -1,23 +1,22 @@
-FROM alpine:3.15
+FROM alpine:3.12
 
 WORKDIR /gerbera_build
 COPY . .
 
 RUN apk add --no-cache tini \
-        util-linux sqlite-libs mariadb-connector-c zlib \
+        util-linux sqlite-libs mariadb-connector-c zlib fmt \
         file libexif curl ffmpeg ffmpegthumbnailer \
         libmatroska libebml taglib && \
     apk add --no-cache --virtual .dev-packages gcc g++ pkgconf make automake autoconf libtool \
-	    util-linux-dev sqlite-dev mariadb-connector-c-dev cmake zlib-dev \
+	    util-linux-dev sqlite-dev mariadb-connector-c-dev cmake zlib-dev fmt-dev \
 	    file-dev libexif-dev curl-dev ffmpeg-dev ffmpegthumbnailer-dev wget xz \
-	    libmatroska-dev libebml-dev taglib-dev git bash && \
-    git clone https://github.com/gerbera/gerbera.git -b v1.11.0 && \
+	    libmatroska-dev libebml-dev taglib-dev git && \
+    git clone https://github.com/gerbera/gerbera.git -b v1.6.4 && \
     mkdir build && \
     cd build && \
     sh ../gerbera/scripts/install-pugixml.sh && \
     sh ../gerbera/scripts/install-pupnp.sh && \
     sh ../gerbera/scripts/install-duktape.sh && \
-    sh ../gerbera/scripts/install-fmt.sh && \
     sh ../gerbera/scripts/install-spdlog.sh && \
     cmake ../gerbera -DWITH_MAGIC=1 -DWITH_MYSQL=1 -DWITH_CURL=1 -DWITH_JS=1 \
         -DWITH_TAGLIB=1 -DWITH_AVCODEC=1 -DWITH_FFMPEGTHUMBNAILER=1 \

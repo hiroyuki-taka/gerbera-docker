@@ -1,5 +1,7 @@
 import {createContainerChain, getPlaylistType, getRootPath} from "./common";
 
+declare const config: any
+
 declare const object_script_path: string
 
 declare const ONLINE_SERVICE_APPLE_TRAILERS
@@ -8,6 +10,7 @@ declare const ONLINE_SERVICE_NONE
 declare const OBJECT_TYPE_CONTAINER
 declare const OBJECT_TYPE_ITEM
 declare const OBJECT_TYPE_ITEM_EXTERNAL_URL
+declare const UPNP_CLASS_CONTAINER
 
 declare const M_TITLE
 declare const M_ARTIST
@@ -21,6 +24,7 @@ declare const M_PARTNUMBER
 declare const M_AUTHOR
 
 declare function addCdsObject(obj: Orig, containerChain: string, lastContainerClass?: string)
+declare function addContainerTree(tree: any): string
 declare function copyObject<T>(originalObject: T): T
 declare function print(...values)
 declare function f2i(s: string): string
@@ -39,6 +43,7 @@ interface Orig {
     title: string
     readonly onlineservice: any
     readonly theora: number
+    readonly res
     readonly aux
     playlistOrder: number
     meta: any
@@ -80,7 +85,16 @@ function addVideo(obj: Orig) {
 
     const found = obj.location.match(regex)
 
-    print('addVideo', found)
+    const dir = getRootPath(object_script_path, obj.location)
+    print('addVideo::Item', found, dir)
+
+    const chain = {
+        video: {title: 'Video', objectType: OBJECT_TYPE_CONTAINER, upnpclass: UPNP_CLASS_CONTAINER, metaData: []},
+        title: {title: 'Title', objectType: OBJECT_TYPE_CONTAINER, upnpclass: UPNP_CLASS_CONTAINER},
+        directories: {title: 'Directories', objectType: OBJECT_TYPE_CONTAINER, upnpclass: UPNP_CLASS_CONTAINER},
+        season: {title: 'Season', objectType: OBJECT_TYPE_CONTAINER, upnpclass: UPNP_CLASS_CONTAINER},
+        parentItem: {title: '...', objectType: OBJECT_TYPE_CONTAINER, upnpclass: UPNP_CLASS_CONTAINER, metaData: [], res: obj.res, aux: obj.aux, refID: obj.id},
+    }
 
     if (found) {
         const [full, container, year, season, title, subtitle, airtime, is_cm] = found
@@ -102,50 +116,63 @@ function addVideo(obj: Orig) {
                     obj.meta[M_DATE] = `${year}-10-01`
             }
         }
-        print(JSON.stringify(obj.meta))
-
-        // addCdsObject({...obj}, createContainerChain(['Video', 'All Video', `${year}${season} ${title}`]))
+        print('addVideo::meta', JSON.stringify(obj.meta))
 
         if (is_cm === '-cm') {
-            addCdsObject({...obj}, createContainerChain(['Video', 'Title', title, 'CM']))
-            addCdsObject({...obj}, createContainerChain(['Video', 'Directories', container, title, 'CM']))
-            addCdsObject({...obj}, createContainerChain(['Video', 'Season', year, season, title, 'CM']))
+            const titleItem = {title: title, objectType: OBJECT_TYPE_CONTAINER, upnpclass: UPNP_CLASS_CONTAINER}
+            const containerItem = {title: container, objectType: OBJECT_TYPE_CONTAINER, upnpclass: UPNP_CLASS_CONTAINER}
+            const yearItem = {title: year, objectType: OBJECT_TYPE_CONTAINER, upnpclass: UPNP_CLASS_CONTAINER}
+            const seasonItem = {title: season, objectType: OBJECT_TYPE_CONTAINER, upnpclass: UPNP_CLASS_CONTAINER}
+
+            addCdsObject({...obj}, addContainerTree([chain.video, chain.title, titleItem, {...chain.parentItem, title: 'CM'}]))
+            addCdsObject({...obj}, addContainerTree([chain.video, chain.directories, containerItem, titleItem, {...chain.parentItem, title: 'CM'}]))
+            addCdsObject({...obj}, addContainerTree([chain.video, chain.season, yearItem, seasonItem, titleItem, {...chain.parentItem, title: 'CM'}]))
         } else {
             obj = {...obj, title: subtitle}
-            addCdsObject({...obj}, createContainerChain(['Video', 'Title', title]))
-            addCdsObject({...obj}, createContainerChain(['Video', 'Directories', container, title]))
-            addCdsObject({...obj}, createContainerChain(['Video', 'Season', year, season, title]))
+
+            const containerItem = {title: container, objectType: OBJECT_TYPE_CONTAINER, upnpclass: UPNP_CLASS_CONTAINER}
+            const yearItem = {title: year, objectType: OBJECT_TYPE_CONTAINER, upnpclass: UPNP_CLASS_CONTAINER}
+            const seasonItem = {title: season, objectType: OBJECT_TYPE_CONTAINER, upnpclass: UPNP_CLASS_CONTAINER}
+
+            addCdsObject({...obj}, addContainerTree([chain.video, chain.title, {...chain.parentItem, title: title}]))
+            addCdsObject({...obj}, addContainerTree([chain.video, chain.directories, containerItem, {...chain.parentItem, title: title}]))
+            addCdsObject({...obj}, addContainerTree([chain.video, chain.season, yearItem, seasonItem, {...chain.parentItem, title: title}]))
         }
     }
 }
 
 if (getPlaylistType(orig.mimetype) === '') {
     const arr = orig.mimetype.split('/');
-    const mime = arr[0]
+    let mime = arr[0]
 
     const obj = {...orig, refID: orig.id}
 
-    if (mime === 'audio') {
+    const upnpClass = orig.upnpclass
+    const audioLayout = config['/import/scripting/virtual-layout/attribute::audio-layout'] || 'Default'
 
-    }
-
-    if (mime === 'video') {
-        if (obj.onlineservice === ONLINE_SERVICE_APPLE_TRAILERS) {
-
-        } else {
+    switch (upnpClass) {
+        case 'object.item.videoItem':
+        case 'object.item.videoItem.movie':
             addVideo(obj)
-        }
-    }
-
-    if (mime === 'video') {
-
-    }
-
-    if (orig.mimetype === 'application/ogg') {
-        if (orig.theora === 1) {
-
-        } else {
-
-        }
+            break
+        case 'object.item.audioItem':
+        case 'object.item.audioItem.multiTrack':
+        case 'object.item.audioItem.audioBook':
+        case 'object.item.audioItem.audioBroadcast':
+        default:
+            print(`Unable to handle upnp class: ${upnpClass} for ${obj.location}`)
+            if (mime === 'video' && obj.onlineservice === ONLINE_SERVICE_APPLE_TRAILERS) {
+                mime = 'trailer'
+            }
+            if (orig.mimetype === 'application/ogg') {
+                mime = (orig.theora === 1) ? 'video' : 'audio'
+            }
+            switch (mime) {
+                case 'video':
+                    addVideo(obj)
+                    break
+                default:
+                    print(`Unable to handle mime type: ${orig.mimetype} for ${obj.location}`)
+            }
     }
 }
