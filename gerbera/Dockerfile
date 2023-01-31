@@ -41,7 +41,7 @@ RUN apk add --no-cache tini  \
         spdlog su-exec tzdata
 
 COPY --from=builder /usr/local/lib/libixml.so* /usr/local/lib/libupnp.so* /usr/lib/
-COPY --from=builder /usr/local/lib/libffmpegthumbnailder.so* /usr/lib/
+COPY --from=builder /usr/local/lib/libffmpegthumbnailer.so* /usr/lib/
 COPY --from=builder /gerbera_build/gerbera/build/gerbera /bin
 COPY --from=builder /gerbera_build/gerbera/scripts/js /usr/local/share/gerbera/js
 COPY --from=builder /gerbera_build/gerbera/web /usr/local/share/gerbera/web
@@ -58,4 +58,4 @@ EXPOSE 49494
 EXPOSE 1900/udp
 
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD [ "gerbera","-port", "49494" ]
+CMD [ "gerbera","--port", "49494", "--config", "/root/.config/gerbera/config.xml" ]

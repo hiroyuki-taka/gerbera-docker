@@ -1,4 +1,5 @@
 /mysql/*
-gerbera.db
-gerbera.db-journal
-gerbera/scripts/node_modules
+/gerbera/config/gerbera.html
+/gerbera/config/gerbera.db
+/gerbera/config/gerbera.db-*
+/gerbera/scripts/node_modules
