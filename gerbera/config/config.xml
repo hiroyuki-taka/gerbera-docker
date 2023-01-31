@@ -9,7 +9,7 @@
                 <account user="gerbera" password="gerbera"/>
             </accounts>
         </ui>
-        <port>49152</port>
+        <port>49494</port>
         <udn>uuid:a66ce585-631e-4ab1-a026-d7dbdeda5c7c</udn>
         <name>Gerbera&lt;docker&gt;</name>
         <home>/root/.config/gerbera</home>

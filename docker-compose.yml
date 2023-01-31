@@ -7,10 +7,23 @@ services:
       - ./gerbera/scripts:/root/.config/scripts
       - /srv/movie:/srv/movie:ro
       - /srv/movie_kana:/srv/movie_kana:ro
-    network_mode: host
+    networks:
+      gerbera-vlan:
+        - ipv4_address: 192.168.0.65
     restart: always
     logging:
       driver: json-file
       options:
         max-file: "3"
         max-size: "10M"
+networks:
+  gerbera-vlan:
+    name: gerbera-vlan
+    driver: macvlan
+    driver_opts:
+      parent: enp4s0
+    ipam:
+      config:
+        - subnet: 192.168.0.0/24
+          ip_range: 192.168.0.64/30
+          gateway: 192.168.0.66
