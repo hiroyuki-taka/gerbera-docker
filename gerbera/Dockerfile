@@ -51,6 +51,6 @@ EXPOSE 49494
 EXPOSE 1900/udp
 
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD [ "gerbera","--port", "49494" ]
+CMD [ "gerbera","--port", "49494", "--config", "/root/.config/gerbera/config.xml" ]
 
 FROM gerbera AS default
