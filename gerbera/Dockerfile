@@ -6,8 +6,13 @@ RUN apk add --no-cache gcc g++ pkgconf make automake autoconf libtool \
 	    util-linux-dev sqlite-dev mariadb-connector-c-dev cmake zlib-dev \
 	    file-dev libexif-dev curl-dev wget xz wavpack wavpack-dev \
 	    libmatroska-dev libebml-dev taglib-dev pugixml-dev \
-        duktape-dev fmt-dev spdlog-dev git bash ffmpeg4-dev tini file ffmpegthumbnailer-dev && \
+        duktape-dev fmt-dev spdlog-dev git bash ffmpeg4-dev tini file && \
     git clone https://github.com/gerbera/gerbera.git -b v1.12.1 
+
+WORKDIR /ffmpegthumbnailer_build
+RUN cp /gerbera_build/gerbera/scripts/install-ffmpegthumbnailer.sh . && \
+    cp /gerbera_build/gerbera/scripts/versions.sh . && \
+    ./install-ffmpegthumbnailer.sh
 
 WORKDIR /libupnp_build
 RUN cp /gerbera_build/gerbera/scripts/install-pupnp.sh . && \
@@ -26,14 +31,15 @@ RUN cmake -S . -B build \
 
 # ---------------------------------------
 FROM ${BASE_IMAGE} as gerbera
-COPY . .
 
 RUN apk add --no-cache tini  \
         util-linux sqlite sqlite-libs zlib \
         file curl ffmpeg4-libs duktape fmt wavpack mariadb-connector-c \
-        libmatroska libebml libexif taglib ffmpeg4-libs pugixml ffmpegthumbnailer \
+        libmatroska libebml libexif taglib ffmpeg4-libs pugixml \
         spdlog su-exec tzdata
 
+COPY --from=builder /usr/local/bin/*  /usr/local/bin/
+COPY --from=builder /usr/local/lib/ffmpegthumbnailer.so*  /usr/lib/
 COPY --from=builder /usr/local/lib/libixml.so* /usr/local/lib/libupnp.so* /usr/lib/
 COPY --from=builder /gerbera_build/gerbera/build/gerbera /bin
 COPY --from=builder /gerbera_build/gerbera/scripts/js /usr/local/share/gerbera/js
