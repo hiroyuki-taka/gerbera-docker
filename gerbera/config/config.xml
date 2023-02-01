@@ -29,10 +29,11 @@
         </storage>
         <protocolInfo extend="yes"/>
         <extended-runtime-options>
-            <ffmpegthumbnailer enabled="yes">
-                <thumbnail-size>128</thumbnail-size>
+            <ffmpegthumbnailer enabled="yes" video-enabled="yes">
+                <cache-dir enabled="yes">/root/.config/gerbera/cache-dir</cache-dir>
+                <thumbnail-size>160</thumbnail-size>
                 <seek-percentage>10</seek-percentage>
-                <workaround-bugs>no</workaround-bugs>
+                <filmstrip-overlay>no</filmstrip-overlay>
                 <image-quality>8</image-quality>
             </ffmpegthumbnailer>
             <mark-played-items enabled="no" suppress-cds-updates="yes">
