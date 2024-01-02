@@ -30,7 +30,7 @@
         <protocolInfo extend="yes"/>
         <extended-runtime-options>
             <ffmpegthumbnailer enabled="yes" video-enabled="yes">
-                <cache-dir enabled="yes">/root/.config/gerbera/cache-dir</cache-dir>
+                <cache-dir enabled="no">/root/.config/gerbera/cache-dir</cache-dir>
                 <thumbnail-size>160</thumbnail-size>
                 <seek-percentage>10</seek-percentage>
                 <filmstrip-overlay>no</filmstrip-overlay>
