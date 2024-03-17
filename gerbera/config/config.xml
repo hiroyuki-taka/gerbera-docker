@@ -10,27 +10,28 @@
             </accounts>
         </ui>
         <port>49494</port>
-        <udn>uuid:a66ce585-631e-4ab1-a026-d7dbdeda5c7c</udn>
-        <name>Gerbera&lt;docker&gt;</name>
+        <udn>uuid:67ee9882-6f4f-480c-8278-c98fe6acc7f0</udn>
+        <name>Gerbera&lt;home2&gt;</name>
         <home>/root/.config/gerbera</home>
         <webroot>/usr/local/share/gerbera/web</webroot>
-        <alive>1800</alive>
+        <alive>180</alive>
         <pc-directory upnp-hide="yes"/>
         <storage>
             <sqlite3 enabled="yes">
                 <database-file>/root/.config/gerbera/gerbera.db</database-file>
             </sqlite3>
-            <mysql enabled="no">
-                <host>database</host>
-                <username>gerbera</username>
-                <password>gerbera</password>
-                <database>gerbera</database>
-            </mysql>
         </storage>
-        <protocolInfo extend="yes"/>
+        <containers enabled="yes">
+            <container location="/LastAdded" title="Recently Added" sort="-last_updated">
+                <filter>upnp:class derivedfrom "object.item" and last_updated &gt; "@last7"</filter>
+            </container>
+            <container location="/LastModified" title="Recently Modified" sort="-last_modified">
+                <filter>upnp:class derivedfrom "object.item" and last_modified &gt; "@last7"</filter>
+            </container>
+        </containers>
         <extended-runtime-options>
             <ffmpegthumbnailer enabled="yes" video-enabled="yes">
-                <cache-dir enabled="no">/root/.config/gerbera/cache-dir</cache-dir>
+                <cache-dir>/root/.config/gerbera/thumbnail-cache</cache-dir>
                 <thumbnail-size>160</thumbnail-size>
                 <seek-percentage>10</seek-percentage>
                 <filmstrip-overlay>no</filmstrip-overlay>
@@ -48,12 +49,23 @@
         <filesystem-charset>UTF-8</filesystem-charset>
         <metadata-charset>UTF-8</metadata-charset>
         <scripting script-charset="UTF-8">
+            <!--            <script-folder>-->
+            <!--                <common>/usr/local/share/gerbera/js</common>-->
+            <!--            </script-folder>-->
+            <!--            <import-function>-->
+            <!--                <playlist>importPlaylist</playlist>-->
+            <!--                <meta-file>importMetadata</meta-file>-->
+            <!--                <audio-file>importAudio</audio-file>-->
+            <!--                <video-file>importVideo</video-file>-->
+            <!--                <image-file>importImage</image-file>-->
+            <!--                <trailer>importTrailer</trailer>-->
+            <!--            </import-function>-->
             <virtual-layout type="js">
                 <import-script>/root/.config/scripts/build/import.js</import-script>
             </virtual-layout>
         </scripting>
         <autoscan use-inotiry="auto">
-            <directory location="/srv/movie_kana" mode="timed" interval="1800" recursive="yes" hidden-files="no"/>
+            <directory location="/srv/movie_kana" mode="timed" interval="600" recursive="yes" hidden-files="no"/>
         </autoscan>
         <layout parent-path="no">
             <path from="([0-9]{4})(.Q) (.*)" to="Year/$1/$2/$3"/>
@@ -69,63 +81,102 @@
         </resources>
         <mappings>
             <extension-mimetype ignore-unknown="no">
+                <map from="asf" to="video/x-ms-asf"/>
+                <map from="asx" to="video/x-ms-asx"/>
+                <map from="dff" to="audio/x-dff"/>
+                <map from="dsd" to="audio/x-dsd"/>
+                <map from="dsf" to="audio/x-dsf"/>
+                <map from="flv" to="video/x-flv"/>
+                <map from="m2ts" to="video/mp2t"/>
+                <map from="m3u" to="audio/x-mpegurl"/>
+                <map from="m3u8" to="audio/x-mpegurl"/>
+                <map from="m4a" to="audio/mp4"/>
+                <map from="mka" to="audio/x-matroska"/>
+                <map from="mkv" to="video/x-matroska"/>
                 <map from="mp3" to="audio/mpeg"/>
-                <map from="mp4" to="video/mpeg"/>
-                <map from="m4a" to="audio/mpeg"/>
-                <map from="ogx" to="application/ogg"/>
-                <map from="ogv" to="video/ogg"/>
+                <map from="mts" to="video/mp2t"/>
                 <map from="oga" to="audio/ogg"/>
                 <map from="ogg" to="audio/ogg"/>
                 <map from="ogm" to="video/ogg"/>
-                <map from="asf" to="video/x-ms-asf"/>
-                <map from="asx" to="video/x-ms-asf"/>
-                <map from="wma" to="audio/x-ms-wma"/>
-                <map from="wax" to="audio/x-ms-wax"/>
-                <map from="wmv" to="video/x-ms-wmv"/>
-                <map from="wvx" to="video/x-ms-wvx"/>
-                <map from="wm" to="video/x-ms-wm"/>
-                <map from="wmx" to="video/x-ms-wmx"/>
-                <map from="m3u" to="audio/x-mpegurl"/>
+                <map from="ogv" to="video/ogg"/>
+                <map from="ogx" to="application/ogg"/>
                 <map from="pls" to="audio/x-scpls"/>
-                <map from="flv" to="video/x-flv"/>
-                <map from="mkv" to="video/x-matroska"/>
-                <map from="mka" to="audio/x-matroska"/>
-                <map from="dsf" to="audio/x-dsd"/>
-                <map from="dff" to="audio/x-dsd"/>
+                <map from="ts" to="video/mp2t"/>
+                <map from="tsa" to="audio/mp2t"/>
+                <map from="tsv" to="video/mp2t"/>
+                <map from="wax" to="audio/x-ms-wax"/>
+                <map from="wm" to="video/x-ms-wm"/>
+                <map from="wma" to="audio/x-ms-wma"/>
+                <map from="wmv" to="video/x-ms-wmv"/>
+                <map from="wmx" to="video/x-ms-wmx"/>
                 <map from="wv" to="audio/x-wavpack"/>
+                <map from="wvx" to="video/x-ms-wvx"/>
+
+                <map from="mp4" to="video/mpeg"/>
                 <!-- Uncomment the line below for PS3 divx support -->
                 <!-- <map from="avi" to="video/divx" /> -->
                 <!-- Uncomment the line below for D-Link DSM / ZyXEL DMA-1000 -->
                 <!-- <map from="avi" to="video/avi" /> -->
             </extension-mimetype>
             <mimetype-upnpclass>
-                <map from="audio/*" to="object.item.audioItem.musicTrack"/>
-                <map from="video/*" to="object.item.videoItem"/>
-                <map from="image/*" to="object.item.imageItem"/>
                 <map from="application/ogg" to="object.item.audioItem.musicTrack"/>
+                <map from="audio/*" to="object.item.audioItem.musicTrack"/>
+                <map from="image/*" to="object.item.imageItem"/>
+                <map from="video/*" to="object.item.videoItem"/>
             </mimetype-upnpclass>
             <mimetype-contenttype>
-                <treat mimetype="audio/mpeg" as="mp3"/>
                 <treat mimetype="application/ogg" as="ogg"/>
-                <treat mimetype="audio/ogg" as="ogg"/>
-                <treat mimetype="audio/x-flac" as="flac"/>
+                <treat mimetype="audio/L16" as="pcm"/>
                 <treat mimetype="audio/flac" as="flac"/>
-                <treat mimetype="audio/x-ms-wma" as="wma"/>
-                <treat mimetype="audio/x-wavpack" as="wv"/>
-                <treat mimetype="image/jpeg" as="jpg"/>
+                <treat mimetype="audio/mp4" as="m4a"/>
+                <treat mimetype="audio/mpeg" as="mp3"/>
+                <treat mimetype="audio/ogg" as="ogg"/>
+                <treat mimetype="audio/x-dsd" as="dsd"/>
+                <treat mimetype="audio/x-flac" as="flac"/>
+                <treat mimetype="audio/x-matroska" as="mka"/>
                 <treat mimetype="audio/x-mpegurl" as="playlist"/>
+                <treat mimetype="audio/x-ms-wma" as="wma"/>
                 <treat mimetype="audio/x-scpls" as="playlist"/>
                 <treat mimetype="audio/x-wav" as="pcm"/>
-                <treat mimetype="audio/L16" as="pcm"/>
-                <treat mimetype="video/x-msvideo" as="avi"/>
+                <treat mimetype="audio/x-wavpack" as="wv"/>
+
+                <treat mimetype="image/jpeg" as="jpg"/>
+                <treat mimetype="image/png" as="png"/>
+
+                <treat mimetype="video/mkv" as="mkv"/>
                 <treat mimetype="video/mp4" as="mp4"/>
-                <treat mimetype="audio/mp4" as="m4a"/>
+                <treat mimetype="video/mpeg" as="mpeg"/>
+
                 <treat mimetype="video/x-matroska" as="mkv"/>
-                <treat mimetype="audio/x-matroska" as="mka"/>
-                <treat mimetype="audio/x-dsd" as="dsd"/>
+                <treat mimetype="video/x-msvideo" as="avi"/>
             </mimetype-contenttype>
+            <mimetype-dlnatransfermode>
+                <map from="application/ogg" to="Streaming"/>
+                <map from="application/x-srt" to="Background"/>
+                <map from="audio/*" to="Streaming"/>
+                <map from="image/*" to="Interactive"/>
+                <map from="srt" to="Background"/>
+                <map from="text/*" to="Background"/>
+                <map from="video/*" to="Streaming"/>
+            </mimetype-dlnatransfermode>
+            <contenttype-dlnaprofile>
+                <map from="asf" to="VC_ASF_AP_L2_WMA"/>
+                <map from="avi" to="AVI"/>
+                <map from="dsd" to="DSF"/>
+                <map from="flac" to="FLAC"/>
+                <map from="jpg" to="JPEG_LRG"/>
+                <map from="mka" to="MKV"/>
+                <map from="mkv" to="MKV"/>
+                <map from="mp3" to="MP3"/>
+                <map from="mp4" to="AVC_MP4_EU"/>
+                <map from="mpeg" to="MPEG_PS_PAL"/>
+                <map from="ogg" to="OGG"/>
+                <map from="pcm" to="LPCM"/>
+                <map from="png" to="PNG_LRG"/>
+                <map from="wma" to="WMAFULL"/>
+            </contenttype-dlnaprofile>
         </mappings>
-        <online-content></online-content>
+        <online-content/>
     </import>
     <transcoding enables="no"/>
 </config>

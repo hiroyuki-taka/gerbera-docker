@@ -3,15 +3,14 @@ const TerserPlugin = require('terser-webpack-plugin')
 
 const config = {
     mode: 'production',
-    devtool: 'source-map',
     entry: {
         'import': './src/import.ts'
     },
     output: {
         publicPath: 'build',
         filename: '[name].js',
-        chunkFilename: 'module-[name].bundle.js',
-        path: path.resolve(__dirname, 'build')
+        chunkFormat: "module",
+        clean: true
     },
     module: {
         rules: [
@@ -21,7 +20,7 @@ const config = {
     resolve: {
         extensions: ['.ts', 'js']
     },
-    target: ['es5']
+    target: ['es2015']
 }
 
 module.exports = config

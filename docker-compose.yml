@@ -9,7 +9,7 @@ services:
       - /srv/movie_kana:/srv/movie_kana:ro
     networks:
       gerbera_vlan:
-        ipv4_address: 192.168.0.90
+        ipv4_address: 192.168.0.176
     restart: always
     logging:
       driver: json-file
