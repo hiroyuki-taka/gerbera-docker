@@ -25,52 +25,50 @@
             <container location="/LastAdded" title="Recently Added" sort="-last_updated">
                 <filter>upnp:class derivedfrom "object.item" and last_updated &gt; "@last7"</filter>
             </container>
-            <container location="/LastModified" title="Recently Modified" sort="-last_modified">
-                <filter>upnp:class derivedfrom "object.item" and last_modified &gt; "@last7"</filter>
-            </container>
         </containers>
-        <extended-runtime-options>
-            <ffmpegthumbnailer enabled="yes" video-enabled="yes">
-                <cache-dir>/root/.config/gerbera/thumbnail-cache</cache-dir>
-                <thumbnail-size>160</thumbnail-size>
-                <seek-percentage>10</seek-percentage>
-                <filmstrip-overlay>no</filmstrip-overlay>
-                <image-quality>8</image-quality>
-            </ffmpegthumbnailer>
-            <mark-played-items enabled="no" suppress-cds-updates="yes">
-                <string mode="append">*</string>
-                <mark>
-                    <content>video</content>
-                </mark>
-            </mark-played-items>
-        </extended-runtime-options>
     </server>
-    <import hidden-files="no" follow-symlinks="yes">
+    <extended-runtime-options>
+        <ffmpegthumbnailer enabled="yes" video-enabled="yes">
+            <cache-dir>/root/.config/gerbera/thumbnail-cache</cache-dir>
+            <thumbnail-size>160</thumbnail-size>
+            <seek-percentage>10</seek-percentage>
+            <filmstrip-overlay>no</filmstrip-overlay>
+            <image-quality>8</image-quality>
+        </ffmpegthumbnailer>
+        <mark-played-items enabled="no" suppress-cds-updates="yes">
+            <string mode="append">*</string>
+            <mark>
+                <content>video</content>
+            </mark>
+        </mark-played-items>
+    </extended-runtime-options>
+    <import hidden-files="no" follow-symlinks="yes" import-mode="grb">
         <filesystem-charset>UTF-8</filesystem-charset>
         <metadata-charset>UTF-8</metadata-charset>
         <scripting script-charset="UTF-8">
-            <!--            <script-folder>-->
-            <!--                <common>/usr/local/share/gerbera/js</common>-->
-            <!--            </script-folder>-->
-            <!--            <import-function>-->
-            <!--                <playlist>importPlaylist</playlist>-->
-            <!--                <meta-file>importMetadata</meta-file>-->
-            <!--                <audio-file>importAudio</audio-file>-->
-            <!--                <video-file>importVideo</video-file>-->
-            <!--                <image-file>importImage</image-file>-->
-            <!--                <trailer>importTrailer</trailer>-->
-            <!--            </import-function>-->
-            <virtual-layout type="js">
-                <import-script>/root/.config/scripts/build/import.js</import-script>
-            </virtual-layout>
+            <script-folder>
+                <common>/usr/local/share/gerbera/js</common>
+                <custom>/root/.config/scripts/custom/</custom>
+            </script-folder>
+            <import-function>
+                <audio-file>importAudioInitial</audio-file>
+                <video-file>importVideo</video-file>
+                <image-file>importImage</image-file>
+                <playlist create-link="yes">importPlaylist</playlist>
+                <meta-file>importMetadata</meta-file>
+                <trailer>importTrailer</trailer>
+            </import-function>
         </scripting>
+        <virtual-layout type="builtin" video-layout="Default" audio-layout="Default">
+
+        </virtual-layout>
         <autoscan use-inotiry="auto">
-            <directory location="/srv/movie_kana" mode="timed" interval="600" recursive="yes" hidden-files="no"/>
+            <directory location="/srv/movie2" mode="timed" interval="600" recursive="yes" hidden-files="no"/>
         </autoscan>
-        <layout parent-path="no">
-            <path from="([0-9]{4})(.Q) (.*)" to="Year/$1/$2/$3"/>
-            <path from="movie_kana/(.)" to="Initial/$1"/>
-        </layout>
+<!--        <layout parent-path="no">-->
+<!--            <path from="([0-9]{4})(.Q) (.*)" to="Year/$1/$2/$3"/>-->
+<!--            <path from="movie_kana/(.)" to="Initial/$1"/>-->
+<!--        </layout>-->
         <resources case-sensitive="yes">
             <subtitle>
                 <add-file name="%filename%.ass"/>

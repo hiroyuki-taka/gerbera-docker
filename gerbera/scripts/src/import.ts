@@ -20,7 +20,6 @@ import {
 
 declare const config: any
 declare const object_script_path: string
-declare const orig: Orig
 
 
 function addAudio(obj: Orig) {
@@ -107,38 +106,44 @@ function addVideo(obj: Orig) {
     }
 }
 
-if (getPlaylistType(orig.mimetype) === '') {
-    const arr = orig.mimetype.split('/');
-    let mime = arr[0]
+function importItem(item: Orig, cont: Orig) {
+    if (getPlaylistType(item.mimetype) === '') {
+        const arr = item.mimetype.split('/');
+        let mime = arr[0]
 
-    const obj = {...orig, parentID: orig.id}
+        const obj = {...item, refID: item.id}
 
-    const upnpClass = orig.upnpclass
-    const audioLayout = config['/import/scripting/virtual-layout/attribute::audio-layout'] || 'Default'
+        const upnpClass = item.upnpclass
+        const audioLayout = config['/import/scripting/virtual-layout/attribute::audio-layout'] || 'Default'
 
-    switch (upnpClass) {
-        case UPNP_CLASS_VIDEO_ITEM:
-        case UPNP_CLASS_VIDEO_MOVIE:
-            addVideo(obj)
-            break
-        case UPNP_CLASS_AUDIO_ITEM:
-        case UPNP_CLASS_ITEM_MUSIC_TRACK:
-        case UPNP_CLASS_AUDIO_BOOK:
-        case UPNP_CLASS_AUDIO_BROADCAST:
-        default:
-            print(`Unable to handle upnp class: ${upnpClass} for ${obj.location}`)
-            if (mime === 'video' && obj.onlineservice === ONLINE_SERVICE_APPLE_TRAILERS) {
-                mime = 'trailer'
-            }
-            if (orig.mimetype === 'application/ogg') {
-                mime = (orig.theora === 1) ? 'video' : 'audio'
-            }
-            switch (mime) {
-                case 'video':
-                    addVideo(obj)
-                    break
-                default:
-                    print(`Unable to handle mime type: ${orig.mimetype} for ${obj.location}`)
-            }
+        switch (upnpClass) {
+            case UPNP_CLASS_VIDEO_ITEM:
+            case UPNP_CLASS_VIDEO_MOVIE:
+                addVideo(obj)
+                break
+            case UPNP_CLASS_AUDIO_ITEM:
+            case UPNP_CLASS_ITEM_MUSIC_TRACK:
+            case UPNP_CLASS_AUDIO_BOOK:
+            case UPNP_CLASS_AUDIO_BROADCAST:
+            default:
+                print(`Unable to handle upnp class: ${upnpClass} for ${obj.location}`)
+                if (mime === 'video' && obj.onlineservice === ONLINE_SERVICE_APPLE_TRAILERS) {
+                    mime = 'trailer'
+                }
+                if (item.mimetype === 'application/ogg') {
+                    mime = (item.theora === 1) ? 'video' : 'audio'
+                }
+                switch (mime) {
+                    case 'video':
+                        addVideo(obj)
+                        break
+                    default:
+                        print(`Unable to handle mime type: ${item.mimetype} for ${obj.location}`)
+                }
+        }
     }
 }
+
+declare var orig: Orig
+declare var cont
+
