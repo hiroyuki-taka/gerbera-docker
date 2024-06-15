@@ -2,7 +2,7 @@ const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
 
 const config = {
-    mode: 'production',
+    mode: 'development',
     entry: {
         'import': './src/import.ts'
     },
