@@ -65,6 +65,11 @@
         <autoscan use-inotiry="auto">
             <directory location="/srv/movie2" mode="timed" interval="600" recursive="yes" hidden-files="no"/>
         </autoscan>
+        <layout parent-path="yes">
+            <path from="All" to="All" />
+            <path from="Initial" to="Initial" />
+            <path from="Season" to="Season" />
+        </layout>
 <!--        <layout parent-path="no">-->
 <!--            <path from="([0-9]{4})(.Q) (.*)" to="Year/$1/$2/$3"/>-->
 <!--            <path from="movie_kana/(.)" to="Initial/$1"/>-->

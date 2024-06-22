@@ -21,7 +21,7 @@
 */
 
 function importPlaylist(obj, cont, rootPath, autoscanId, containerType) {
-    if (!obj) {
+    if (!obj || obj === undefined) {
         print2("Error", "Playlist undefined");
     }
 
@@ -30,27 +30,26 @@ function importPlaylist(obj, cont, rootPath, autoscanId, containerType) {
     const objLocation = obj.location.substring(0, obj.location.lastIndexOf('/') + 1);
     const type = getPlaylistType(obj.mimetype);
     var obj_title = obj.title;
-    var last_path = getLastPath(obj.location);
 
     const boxSetup = config['/import/scripting/virtual-layout/boxlayout/box'];
 
     const chain = {
         objRoot: {
-            id: boxSetup['Playlist/playlistRoot'].id,
-            title: boxSetup['Playlist/playlistRoot'].title,
+            id: boxSetup[BK_playlistRoot].id,
+            title: boxSetup[BK_playlistRoot].title,
             objectType: OBJECT_TYPE_CONTAINER,
             upnpclass: UPNP_CLASS_CONTAINER,
             metaData: []
         },
         allPlaylists: {
-            id: boxSetup['Playlist/allPlaylists'].id,
-            title: boxSetup['Playlist/allPlaylists'].title,
+            id: boxSetup[BK_playlistAll].id,
+            title: boxSetup[BK_playlistAll].title,
             objectType: OBJECT_TYPE_CONTAINER,
             upnpclass: UPNP_CLASS_CONTAINER
         },
         allDirectories: {
-            id: boxSetup['Playlist/allDirectories'].id,
-            title: boxSetup['Playlist/allDirectories'].title,
+            id: boxSetup[BK_playlistAllDirectories].id,
+            title: boxSetup[BK_playlistAllDirectories].title,
             objectType: OBJECT_TYPE_CONTAINER,
             upnpclass: UPNP_CLASS_CONTAINER
         },
@@ -65,20 +64,33 @@ function importPlaylist(obj, cont, rootPath, autoscanId, containerType) {
             metaData: []
         },
         lastPath: {
-            title: last_path,
+            title: '',
             objectType: OBJECT_TYPE_CONTAINER,
             upnpclass: UPNP_CLASS_CONTAINER,
             metaData: []
         }
     };
     chain.objRoot.metaData[M_CONTENT_CLASS] = [UPNP_CLASS_PLAYLIST_ITEM];
+    var last_path = getLastPath2(obj.location, boxSetup[BK_playlistAllDirectories].size);
 
     var objChain = addContainerTree([chain.objRoot, chain.allPlaylists, chain.title]);
 
     var objDirChain;
     if (last_path) {
         chain.title.searchable = false;
-        objDirChain = addContainerTree([chain.objRoot, chain.allDirectories, chain.lastPath, chain.title]);
+        const dirChain = [chain.objRoot, chain.allDirectories];
+        for (var di = 0; di < last_path.length; di++) {
+            const lastPathChain = {
+                title: last_path[di],
+                objectType: chain.lastPath.objectType,
+                upnpclass: chain.lastPath.upnpclass,
+                metaData: chain.lastPath.metaData
+            };
+            dirChain.push(lastPathChain);
+        }
+
+        dirChain.push(chain.title);
+        objDirChain = addContainerTree(dirChain);
     }
 
     if (type === '') {
@@ -95,7 +107,7 @@ function importPlaylist(obj, cont, rootPath, autoscanId, containerType) {
 var playlist;
 var cont;
 // compatibility with older configurations
-if (!cont)
+if (!cont || cont === undefined)
     cont = playlist;
-if (playlist)
+if (playlist && playlist !== undefined)
     importPlaylist(playlist, cont, "", -1, "");

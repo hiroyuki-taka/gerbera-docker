@@ -22,8 +22,8 @@
 
 function importMetadata(meta, cont, rootPath, autoscanId, containerType) {
     const arr = rootPath.split('.');
-    print2("Info", "Processing metafile: " + rootPath + " for " + meta.location + " " + arr[arr.length-1].toLowerCase());
-    switch (arr[arr.length-1].toLowerCase()) {
+    print2("Info", "Processing metafile: " + rootPath + " for " + meta.location + " " + arr[arr.length - 1].toLowerCase());
+    switch (arr[arr.length - 1].toLowerCase()) {
         case "nfo":
             parseNfo(meta, rootPath);
             updateCdsObject(meta);
@@ -34,7 +34,7 @@ function importMetadata(meta, cont, rootPath, autoscanId, containerType) {
 var obj;
 var cont;
 // compatibility with older configurations
-if (!cont)
+if (!cont || cont === undefined)
     cont = obj;
-if (obj)
+if (obj && obj !== undefined)
     importMetadata(obj, cont, object_script_path, -1, "");
