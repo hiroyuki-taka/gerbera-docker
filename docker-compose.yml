@@ -5,6 +5,7 @@ services:
       - ./gerbera/config:/root/.config/gerbera
       - ./gerbera/scripts:/root/.config/scripts
       - /srv/movie2:/srv/movie2:ro
+      - /srv/movie_recorded:/srv/movie_recorded:ro
     networks:
       gerbera_vlan:
         ipv4_address: 192.168.0.176

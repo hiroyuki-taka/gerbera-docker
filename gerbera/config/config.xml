@@ -3,7 +3,7 @@
         xmlns="http://mediatomb.cc/config/2"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://mediatomb.cc/config/2 http://mediatomb.cc/config/2.xsd">
-    <server>
+    <server debug-mode="config|content|cds|script|layout">
         <ui enabled="yes" show-tooltips="yes">
             <accounts enabled="no" session-timeout="30">
                 <account user="gerbera" password="gerbera"/>
@@ -45,9 +45,13 @@
     <import hidden-files="no" follow-symlinks="yes" import-mode="grb">
         <filesystem-charset>UTF-8</filesystem-charset>
         <metadata-charset>UTF-8</metadata-charset>
+        <autoscan use-inotiry="auto">
+<!--            <directory location="/srv/movie2" mode="timed" interval="60" recursive="yes" hidden-files="no"/>-->
+            <directory location="/srv/movie_recorded/out" mode="timed" interval="60" recursive="yes" hidden-files="no" />
+        </autoscan>
         <scripting script-charset="UTF-8">
             <script-folder>
-                <common>/usr/local/share/gerbera/js</common>
+                <common>/root/.config/scripts/common/</common>
                 <custom>/root/.config/scripts/custom/</custom>
             </script-folder>
             <import-function>
@@ -58,22 +62,76 @@
                 <meta-file>importMetadata</meta-file>
                 <trailer>importTrailer</trailer>
             </import-function>
+            <virtual-layout type="js">
+                <import-script>/root/.config/scripts/custom/custom-import.js</import-script>
+                <structured-layout skip-chars="" div-char=""/>
+                <genre-map/>
+                <boxlayout>
+                    <box key="Audio/allAlbums" title="Albums" class="object.container"/>
+                    <box key="Audio/allArtists" title="Artists" class="object.container"/>
+                    <box key="Audio/allAudio" title="All Audio" class="object.container"/>
+                    <box key="Audio/allComposers" title="Composers" class="object.container"/>
+                    <box key="Audio/allDirectories" title="Directories" class="object.container"/>
+                    <box key="Audio/allGenres" title="Genres" class="object.container"/>
+                    <box key="Audio/allSongs" title="All Songs" class="object.container"/>
+                    <box key="Audio/allTracks" title="All - full name" class="object.container"/>
+                    <box key="Audio/allYears" title="Year" class="object.container"/>
+                    <box key="Audio/audioRoot" title="Audio" class="object.container"/>
+                    <box key="Audio/artistChronology" title="Album Chronology" class="object.container"/>
+                    <box key="AudioInitial/abc" title="ABC" class="object.container"/>
+                    <box key="AudioInitial/allArtistTracks" title="000 All" class="object.container"/>
+                    <box key="AudioInitial/allBooks" title="Books" class="object.container"/>
+                    <box key="AudioInitial/audioBookRoot" title="AudioBooks" class="object.container"/>
+                    <box key="AudioStructured/allAlbums" title="-Album-" class="object.container" size="6"/>
+                    <box key="AudioStructured/allArtistTracks" title="all" class="object.container"/>
+                    <box key="AudioStructured/allArtists" title="-Artist-" class="object.container" size="9"/>
+                    <box key="AudioStructured/allGenres" title="-Genre-" class="object.container" size="6"/>
+                    <box key="AudioStructured/allTracks" title="-Track-" class="object.container" size="6"/>
+                    <box key="AudioStructured/allYears" title="-Year-" class="object.container"/>
+                    <box key="Video/allDates" title="Date" class="object.container"/>
+                    <box key="Video/allDirectories" title="Directories" class="object.container"/>
+                    <box key="Video/allVideo" title="All Video" class="object.container"/>
+                    <box key="Video/allYears" title="Year" class="object.container"/>
+                    <box key="Video/unknown" title="Unknown" class="object.container"/>
+                    <box key="Video/videoRoot" title="Video" class="object.container"/>
+                    <box key="Image/allDates" title="Date" class="object.container"/>
+                    <box key="Image/allDirectories" title="Directories" class="object.container"/>
+                    <box key="Image/allImages" title="All Photos" class="object.container"/>
+                    <box key="Image/allYears" title="Year" class="object.container"/>
+                    <box key="Image/imageRoot" title="Photos" class="object.container"/>
+                    <box key="Image/unknown" title="Unknown" class="object.container"/>
+                    <box key="Trailer/trailerRoot" title="Online Services" class="object.container"/>
+                    <box key="Trailer/appleTrailers" title="Apple Trailers" class="object.container"/>
+                    <box key="Trailer/allTrailers" title="All Trailers" class="object.container"/>
+                    <box key="Trailer/allGenres" title="Genres" class="object.container"/>
+                    <box key="Trailer/relDate" title="Release Date" class="object.container"/>
+                    <box key="Trailer/postDate" title="Post Date" class="object.container"/>
+                    <box key="Trailer/unknown" title="Unknown" class="object.container"/>
+                    <box key="Playlist/playlistRoot" title="Playlists" class="object.container"/>
+                    <box key="Playlist/allPlaylists" title="All Playlists" class="object.container"/>
+                    <box key="Playlist/allDirectories" title="Directories" class="object.container"/>
+                </boxlayout>
+            </virtual-layout>
         </scripting>
-        <virtual-layout type="builtin" video-layout="Default" audio-layout="Default">
-
-        </virtual-layout>
-        <autoscan use-inotiry="auto">
-            <directory location="/srv/movie2" mode="timed" interval="600" recursive="yes" hidden-files="no"/>
-        </autoscan>
-        <layout parent-path="yes">
-            <path from="All" to="All" />
-            <path from="Initial" to="Initial" />
-            <path from="Season" to="Season" />
-        </layout>
-<!--        <layout parent-path="no">-->
-<!--            <path from="([0-9]{4})(.Q) (.*)" to="Year/$1/$2/$3"/>-->
-<!--            <path from="movie_kana/(.)" to="Initial/$1"/>-->
-<!--        </layout>-->
+        <library-options muiti-value-separator="; " legacy-value-separator="">
+            <libexif charset="UTF-8">
+                <auxdata></auxdata>
+                <metadata></metadata>
+            </libexif>
+            <exiv2 charset="UTF-8">
+                <auxdata></auxdata>
+                <metadata></metadata>
+            </exiv2>
+            <id3 charset="UTF-8">
+                <auxdata></auxdata>
+                <metadata></metadata>
+            </id3>
+            <ffmpeg charset="UTF-8">
+                <auxdata></auxdata>
+                <metadata></metadata>
+            </ffmpeg>
+        </library-options>
+        <layout parent-path="no"/>
         <resources case-sensitive="yes">
             <subtitle>
                 <add-file name="%filename%.ass"/>
@@ -81,6 +139,7 @@
             <resource>
                 <add-file name="%filename%.ass"/>
             </resource>
+            <container parentCount="3" />
         </resources>
         <mappings>
             <extension-mimetype ignore-unknown="no">

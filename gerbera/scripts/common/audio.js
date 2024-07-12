@@ -21,9 +21,11 @@
 */
 
 // Create layout that has a slot for each initial of the album artist
+var object_ref_list;
 function importAudioInitial(obj, cont, rootPath, autoscanId, containerType) {
     object_autoscan_id = autoscanId;
-    addAudioInitial(obj, cont, rootPath, containerType);
+    object_ref_list = addAudioInitial(obj, cont, rootPath, containerType);
+    return object_ref_list;
 }
 
 function addAudioInitial(obj, cont, rootPath, containerType) {
@@ -43,7 +45,7 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
     }
 
     var desc = '';
-    var artist = ['Unknown'];
+    var artist = [ 'Unknown' ];
     var artist_full = null;
     if (obj.metaData[M_ARTIST] && obj.metaData[M_ARTIST][0]) {
         artist = obj.metaData[M_ARTIST];
@@ -54,23 +56,23 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
 
     var aartist = obj.aux && obj.aux['TPE2'] ? obj.aux['TPE2'] : artist[0];
     if (obj.metaData[M_ALBUMARTIST] && obj.metaData[M_ALBUMARTIST][0]) {
-        aartist = obj.metaData[M_ALBUMARTIST][0];
+       aartist = obj.metaData[M_ALBUMARTIST][0];
     }
 
     var disknr = '';
     if (obj.aux) {
         disknr = obj.aux['DISCNUMBER'];
-        if (!disknr || disknr.length == 0) {
-            disknr = obj.aux['TPOS'];
+        if (!disknr || disknr.length==0) {
+           disknr = obj.aux['TPOS'];
         }
     }
-    if (!disknr || disknr.length == 0) {
+    if (!disknr || disknr.length==0) {
         disknr = '';
     } else if (disknr == '1/1') {
         disknr = '';
     } else {
-        var re = new RegExp("[^0-9].*", "i");
-        disknr = new String(disknr).replace(re, "");
+        var re = new RegExp("[^0-9].*","i");
+        disknr = new String(disknr).replace(re,"");
     }
 
     var album = 'Unknown';
@@ -89,11 +91,11 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
     var date = 'Unknown';
     if (obj.metaData[M_DATE] && obj.metaData[M_DATE][0]) {
         date = getYear(obj.metaData[M_DATE][0]);
-        obj.metaData[M_UPNP_DATE] = [date];
+        obj.metaData[M_UPNP_DATE] = [ date ];
         desc = desc + ', ' + date;
     }
 
-    var genre = 'Unknown';
+    var genre= 'Unknown';
     if (obj.metaData[M_GENRE] && obj.metaData[M_GENRE][0]) {
         //genre = mapGenre(obj.metaData[M_GENRE][0]);
         genre = obj.metaData[M_GENRE][0];
@@ -112,7 +114,7 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
     }
 
     if (desc) {
-        obj.description = desc;
+         obj.description = desc;
     }
 
     var track = obj.metaData[M_TRACKNUMBER] ? obj.metaData[M_TRACKNUMBER][0] : '';
@@ -123,13 +125,14 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
             track = '0' + track;
         }
         if ((disknr.length > 0) && (track.length == 2)) {
-            track = '0' + track;
+          track = '0' + track;
         }
         if (disknr.length == 1) {
-            obj.metaData[M_TRACKNUMBER] = [disknr + '' + track];
+            obj.metaData[M_TRACKNUMBER] = [ disknr + '' + track ];
             track = '0' + disknr + ' ' + track;
-        } else {
-            obj.metaData[M_TRACKNUMBER] = [disknr + '' + track];
+        }
+        else {
+            obj.metaData[M_TRACKNUMBER] = [ disknr + '' + track ];
             if (disknr.length > 1) {
                 track = disknr + ' ' + track;
             }
@@ -162,62 +165,52 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
             id: boxSetup[BK_audioRoot].id,
             title: boxSetup[BK_audioRoot].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: boxSetup[BK_audioRoot].class
-        },
+            upnpclass: boxSetup[BK_audioRoot].class },
         allAudio: {
             id: boxSetup[BK_audioAll].id,
             title: boxSetup[BK_audioAll].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: boxSetup[BK_audioAll].class
-        },
+            upnpclass: boxSetup[BK_audioAll].class },
         allArtists: {
             id: boxSetup[BK_audioAllArtists].id,
             title: boxSetup[BK_audioAllArtists].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: boxSetup[BK_audioAllArtists].class
-        },
+            upnpclass: boxSetup[BK_audioAllArtists].class },
         allGenres: {
             id: boxSetup[BK_audioAllGenres].id,
             title: boxSetup[BK_audioAllGenres].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: boxSetup[BK_audioAllGenres].class
-        },
+            upnpclass: boxSetup[BK_audioAllGenres].class },
         allAlbums: {
             id: boxSetup[BK_audioAllAlbums].id,
             title: boxSetup[BK_audioAllAlbums].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: boxSetup[BK_audioAllAlbums].class
-        },
+            upnpclass: boxSetup[BK_audioAllAlbums].class },
         allYears: {
             id: boxSetup[BK_audioAllYears].id,
             title: boxSetup[BK_audioAllYears].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: boxSetup[BK_audioAllYears].class
-        },
+            upnpclass: boxSetup[BK_audioAllYears].class },
         allComposers: {
             id: boxSetup[BK_audioAllComposers].id,
             title: boxSetup[BK_audioAllComposers].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: boxSetup[BK_audioAllComposers].class
-        },
+            upnpclass: boxSetup[BK_audioAllComposers].class },
         allSongs: {
             id: boxSetup[BK_audioAllSongs].id,
             title: boxSetup[BK_audioAllSongs].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: boxSetup[BK_audioAllSongs].class
-        },
+            upnpclass: boxSetup[BK_audioAllSongs].class },
         allFull: {
             id: boxSetup[BK_audioAllTracks].id,
             title: boxSetup[BK_audioAllTracks].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: boxSetup[BK_audioAllTracks].class
-        },
+            upnpclass: boxSetup[BK_audioAllTracks].class },
         artistChronology: {
             id: boxSetup[BK_audioArtistChronology].id,
             title: boxSetup[BK_audioArtistChronology].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: boxSetup[BK_audioArtistChronology].class
-        },
+            upnpclass: boxSetup[BK_audioArtistChronology].class },
         all000: {
             id: boxSetup[BK_audioInitialAllArtistTracks].id,
             title: boxSetup[BK_audioInitialAllArtistTracks].title,
@@ -226,20 +219,17 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
             metaData: [],
             res: parentCount > 0 ? cont.res : undefined,
             aux: obj.aux,
-            refID: containerRefID
-        },
+            refID: containerRefID },
         abc: {
             id: boxSetup[BK_audioInitialAbc].id,
             title: boxSetup[BK_audioInitialAbc].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: boxSetup[BK_audioInitialAbc].class
-        },
+            upnpclass: boxSetup[BK_audioInitialAbc].class },
 
         init: {
             title: '_',
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: UPNP_CLASS_CONTAINER
-        },
+            upnpclass: UPNP_CLASS_CONTAINER },
         artist: {
             title: aartist,
             location: aartist,
@@ -248,8 +238,7 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
             metaData: [],
             res: containerResource,
             aux: obj.aux,
-            refID: containerRefID
-        },
+            refID: containerRefID },
         album: {
             title: album,
             location: getRootPath(rootPath, obj.location).join('_'),
@@ -258,8 +247,7 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
             metaData: [],
             res: parentCount > 0 ? cont.res : undefined,
             aux: obj.aux,
-            refID: containerRefID
-        },
+            refID: containerRefID },
         genre: {
             title: genre,
             objectType: OBJECT_TYPE_CONTAINER,
@@ -267,8 +255,7 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
             metaData: [],
             res: containerResource,
             aux: obj.aux,
-            refID: containerRefID
-        },
+            refID: containerRefID },
         year: {
             title: date,
             objectType: OBJECT_TYPE_CONTAINER,
@@ -277,8 +264,7 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
             metaData: [],
             res: containerResource,
             aux: obj.aux,
-            refID: containerRefID
-        },
+            refID: containerRefID },
         composer: {
             title: composer,
             objectType: OBJECT_TYPE_CONTAINER,
@@ -287,23 +273,23 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
             metaData: [],
             res: containerResource,
             aux: obj.aux,
-            refID: containerRefID
-        },
+            refID: containerRefID },
     };
     const isAudioBook = obj.upnpclass === UPNP_CLASS_AUDIO_BOOK;
-    chain.album.metaData[M_ARTIST] = [aartist];
-    chain.album.metaData[M_ALBUMARTIST] = [aartist];
-    chain.album.metaData[M_GENRE] = [genre];
+    chain.album.metaData[M_ARTIST] = [ aartist ];
+    chain.album.metaData[M_ALBUMARTIST] = [ aartist ];
+    chain.album.metaData[M_GENRE] = [ genre ];
     chain.album.metaData[M_DATE] = obj.metaData[M_DATE];
     chain.album.metaData[M_UPNP_DATE] = obj.metaData[M_UPNP_DATE];
-    chain.album.metaData[M_ALBUM] = [album];
-    chain.artist.metaData[M_ARTIST] = [aartist];
-    chain.artist.metaData[M_ALBUMARTIST] = [aartist];
-    chain.all000.metaData[M_ARTIST] = [aartist];
-    chain.all000.metaData[M_ALBUMARTIST] = [aartist];
-    chain.year.metaData[M_DATE] = [date];
-    chain.year.metaData[M_UPNP_DATE] = [date];
-    chain.composer.metaData[M_COMPOSER] = [composer];
+    chain.album.metaData[M_ALBUM] = [ album ];
+    chain.artist.metaData[M_ARTIST] = [ aartist ];
+    chain.artist.metaData[M_ALBUMARTIST] = [ aartist ];
+    chain.all000.metaData[M_ARTIST] = [ aartist ];
+    chain.all000.metaData[M_ALBUMARTIST] = [ aartist ];
+    chain.year.metaData[M_DATE] = [ date ];
+    chain.year.metaData[M_UPNP_DATE] = [ date ];
+    chain.composer.metaData[M_COMPOSER] = [ composer ];
+    const result = [];
 
     var container;
     if (isAudioBook) {
@@ -311,19 +297,17 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
             id: boxSetup[BK_audioInitialAudioBookRoot].id,
             title: boxSetup[BK_audioInitialAudioBookRoot].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: boxSetup[BK_audioInitialAudioBookRoot].class
-        };
+            upnpclass: boxSetup[BK_audioInitialAudioBookRoot].class };
         chain.allAlbums = {
             id: boxSetup[BK_audioInitialAllBooks].id,
             title: boxSetup[BK_audioInitialAllBooks].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: boxSetup[BK_audioInitialAllBooks].class
-        };
+            upnpclass: boxSetup[BK_audioInitialAllBooks].class };
     } else {
         container = addContainerTree([chain.audio, chain.allAudio]);
-        addCdsObject(obj, container);
+        result.push(addCdsObject(obj, container));
         container = addContainerTree([chain.audio, chain.allArtists, chain.artist, chain.allSongs]);
-        addCdsObject(obj, container);
+        result.push(addCdsObject(obj, container));
     }
 
     var temp = '';
@@ -341,24 +325,24 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
         obj.title = temp + title;
         if (boxSetup[BK_audioAllTracks].enabled) {
             container = addContainerTree([chain.audio, chain.allFull]);
-            addCdsObject(obj, container);
+            result.push(addCdsObject(obj, container));
             container = addContainerTree([chain.audio, chain.allArtists, chain.artist, chain.allFull]);
-            addCdsObject(obj, container);
+            result.push(addCdsObject(obj, container));
         }
     }
     obj.title = track + title;
     container = addContainerTree([chain.audio, chain.allArtists, chain.artist, chain.album]);
-    addCdsObject(obj, container);
+    result.push(addCdsObject(obj, container));
 
     if (boxSetup[BK_audioAllAlbums].enabled) {
         if (!isAudioBook) {
             obj.title = album + " - " + track + title;
             container = addContainerTree([chain.audio, chain.allAlbums, chain.artist, chain.all000]);
-            addCdsObject(obj, container);
+            result.push(addCdsObject(obj, container));
         }
         obj.title = track + title;
         container = addContainerTree([chain.audio, chain.allAlbums, chain.artist, chain.album]);
-        addCdsObject(obj, container);
+        result.push(addCdsObject(obj, container));
 
         obj.title = track + title;
         // Remember, the server will sort all items by ID3 track if the
@@ -370,7 +354,7 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
             chain.album.location = getRootPath(rootPath, obj.location).join('_');
             container = addContainerTree([chain.audio, chain.allAlbums, chain.all000, chain.album]);
             chain.album.location = '';
-            addCdsObject(obj, container);
+            result.push(addCdsObject(obj, container));
         }
     }
 
@@ -392,7 +376,7 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
 
     var noAll = ['Audio Book', 'H.*rspiel', 'Stories', 'Gesprochen', 'Comedy'];
     var spokenMatch = false;
-    for (var k = 0; k < noAll.length; k++) {
+    for (var k=0; k < noAll.length; k++) {
         var re = new RegExp(noAll[k], 'i');
         var match = re.exec(genre);
         if (match) {
@@ -405,7 +389,7 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
 
     if (!isAudioBook) {
         container = addContainerTree([chain.audio, chain.abc, chain.init, chain.artist, chain.album]);
-        addCdsObject(obj, container);
+        result.push(addCdsObject(obj, container));
     }
     chain.artist.searchable = false;
     chain.album.searchable = false;
@@ -416,7 +400,7 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
             part = obj.metaData[M_UPNP_DATE][0] + ' - ';
         obj.title = part + chain.album.title + " - " + track + title;
         container = addContainerTree([chain.audio, chain.abc, chain.init, chain.artist, chain.all000]);
-        addCdsObject(obj, container);
+        result.push(addCdsObject(obj, container));
     }
     chain.album.title = album;
 
@@ -433,12 +417,12 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
                 gMatch = 1;
                 chain.genre.title = genreConfig[genreNames[idx]];
                 chain.all000.upnpclass = UPNP_CLASS_CONTAINER_MUSIC_GENRE;
-                chain.all000.metaData[M_GENRE] = [genreConfig[genreNames[idx]]];
-                chain.genre.metaData[M_GENRE] = [genreConfig[genreNames[idx]]];
+                chain.all000.metaData[M_GENRE] = [ genreConfig[genreNames[idx]] ];
+                chain.genre.metaData[M_GENRE] = [ genreConfig[genreNames[idx]] ];
 
                 if (!isAudioBook) {
                     container = addContainerTree([chain.audio, chain.allGenres, chain.genre, chain.all000]);
-                    addCdsObject(obj, container);
+                    result.push(addCdsObject(obj, container));
                 }
                 if (chain.genre.title === 'Children\'s') {
                     if (disknr.length === 1) {
@@ -448,37 +432,37 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
                     }
                 }
                 container = addContainerTree([chain.audio, chain.allGenres, chain.genre, chain.artist, chain.album]);
-                addCdsObject(obj, container);
+                result.push(addCdsObject(obj, container));
             }
         }
         obj.title = temp + title;
         if (gMatch === 0) {
             chain.genre.title = 'Other';
-            chain.genre.metaData[M_GENRE] = ['Other'];
+            chain.genre.metaData[M_GENRE] = [ 'Other' ];
             container = addContainerTree([chain.audio, chain.allGenres, chain.genre]);
-            addCdsObject(obj, container);
+            result.push(addCdsObject(obj, container));
         }
 
         chain.genre.title = genre;
-        chain.genre.metaData[M_GENRE] = [genre];
+        chain.genre.metaData[M_GENRE] = [ genre ];
         chain.all000.upnpclass = UPNP_CLASS_CONTAINER;
         chain.all000.metaData[M_GENRE] = [];
         chain.genre.searchable = true;
 
         if (!isAudioBook) {
             container = addContainerTree([chain.audio, chain.allGenres, chain.all000, chain.genre]);
-            addCdsObject(obj, container);
+            result.push(addCdsObject(obj, container));
         }
     }
 
     if (boxSetup[BK_audioAllYears].enabled) {
         container = addContainerTree([chain.audio, chain.allYears, chain.year]);
-        addCdsObject(obj, container);
+        result.push(addCdsObject(obj, container));
     }
 
     if (boxSetup[BK_audioAllComposers].enabled) {
         container = addContainerTree([chain.audio, chain.allComposers, chain.composer]);
-        addCdsObject(obj, container);
+        result.push(addCdsObject(obj, container));
     }
 
     if (boxSetup[BK_audioArtistChronology].enabled && boxSetup[BK_audioAllArtists].enabled) {
@@ -486,8 +470,9 @@ function addAudioInitial(obj, cont, rootPath, containerType) {
         chain.artist.searchable = false;
         chain.album.title = date + " - " + album;
         container = addContainerTree([chain.audio, chain.allArtists, chain.artist, chain.artistChronology, chain.album]);
-        addCdsObject(obj, container);
+        result.push(addCdsObject(obj, container));
 
         chain.album.title = album; // Restore the title;
     }
+    return result;
 }

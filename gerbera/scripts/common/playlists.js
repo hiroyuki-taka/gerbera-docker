@@ -39,20 +39,17 @@ function importPlaylist(obj, cont, rootPath, autoscanId, containerType) {
             title: boxSetup[BK_playlistRoot].title,
             objectType: OBJECT_TYPE_CONTAINER,
             upnpclass: UPNP_CLASS_CONTAINER,
-            metaData: []
-        },
+            metaData: [] },
         allPlaylists: {
             id: boxSetup[BK_playlistAll].id,
             title: boxSetup[BK_playlistAll].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: UPNP_CLASS_CONTAINER
-        },
+            upnpclass: UPNP_CLASS_CONTAINER },
         allDirectories: {
             id: boxSetup[BK_playlistAllDirectories].id,
             title: boxSetup[BK_playlistAllDirectories].title,
             objectType: OBJECT_TYPE_CONTAINER,
-            upnpclass: UPNP_CLASS_CONTAINER
-        },
+            upnpclass: UPNP_CLASS_CONTAINER },
 
         title: {
             searchable: true,
@@ -61,20 +58,19 @@ function importPlaylist(obj, cont, rootPath, autoscanId, containerType) {
             objectType: OBJECT_TYPE_CONTAINER,
             mtime: obj.mtime,
             upnpclass: UPNP_CLASS_PLAYLIST_CONTAINER,
-            metaData: []
-        },
+            metaData: [] },
         lastPath: {
             title: '',
             objectType: OBJECT_TYPE_CONTAINER,
             upnpclass: UPNP_CLASS_CONTAINER,
-            metaData: []
-        }
+            metaData: [] }
     };
-    chain.objRoot.metaData[M_CONTENT_CLASS] = [UPNP_CLASS_PLAYLIST_ITEM];
+    chain.objRoot.metaData[M_CONTENT_CLASS] = [ UPNP_CLASS_PLAYLIST_ITEM ];
     var last_path = getLastPath2(obj.location, boxSetup[BK_playlistAllDirectories].size);
 
     var objChain = addContainerTree([chain.objRoot, chain.allPlaylists, chain.title]);
 
+    var result = [];
     var objDirChain;
     if (last_path) {
         chain.title.searchable = false;
@@ -84,11 +80,9 @@ function importPlaylist(obj, cont, rootPath, autoscanId, containerType) {
                 title: last_path[di],
                 objectType: chain.lastPath.objectType,
                 upnpclass: chain.lastPath.upnpclass,
-                metaData: chain.lastPath.metaData
-            };
+                metaData: chain.lastPath.metaData };
             dirChain.push(lastPathChain);
-        }
-
+        };
         dirChain.push(chain.title);
         objDirChain = addContainerTree(dirChain);
     }
@@ -96,18 +90,20 @@ function importPlaylist(obj, cont, rootPath, autoscanId, containerType) {
     if (type === '') {
         print2("Error", "Unknown playlist mimetype: '" + obj.mimetype + "' of playlist '" + obj.location + "'");
     } else if (type === 'm3u') {
-        readM3uPlaylist(obj_title, objLocation, objChain, objDirChain);
+        result = readM3uPlaylist(obj_title, objLocation, objChain, objDirChain);
     } else if (type === 'pls') {
-        readPlsPlaylist(obj_title, objLocation, objChain, objDirChain);
+        result = readPlsPlaylist(obj_title, objLocation, objChain, objDirChain);
     } else if (type === 'asx') {
-        readAsxPlaylist(obj_title, objLocation, objChain, objDirChain);
+        result = readAsxPlaylist(obj_title, objLocation, objChain, objDirChain);
     }
+    return result;
 }
 
 var playlist;
 var cont;
+var object_ref_list;
 // compatibility with older configurations
 if (!cont || cont === undefined)
     cont = playlist;
 if (playlist && playlist !== undefined)
-    importPlaylist(playlist, cont, "", -1, "");
+    object_ref_list = importPlaylist(playlist, cont, "", -1, "");

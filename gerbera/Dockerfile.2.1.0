@@ -2,14 +2,14 @@ ARG BASE_IMAGE=debian:trixie-slim
 FROM ${BASE_IMAGE} AS builder
 
 WORKDIR /gerbera_build
-RUN apt-get update && apt-get upgrade -y && \
+RUN apt-get update && \
     apt-get install -y git build-essential autoconf automake libtool util-linux cmake \
         dpkg-dev shtool pkg-config bsdmainutils \
         libupnp-dev  uuid-dev libpugixml-dev zlib1g-dev libfmt-dev libspdlog-dev duktape-dev libduktape207 \
         curl libcurl4-openssl-dev libavformat-dev libwavpack-dev libmagic-dev \
         libexif-dev libexiv2-dev libpugixml-dev libebml-dev libmatroska-dev libffmpegthumbnailer-dev \
         libsqlite3-dev libmariadb-dev libtag1-dev && \
-    git clone https://github.com/gerbera/gerbera.git -b v2.2.0
+    git clone https://github.com/gerbera/gerbera.git -b v2.1.0
 
 WORKDIR /gerbera_build/gerbera
 RUN cmake -S . -B build \
