@@ -110,6 +110,7 @@ function importAudioStructured(obj, cont, rootPath, autoscanId, containerType) {
     return addAudioStructured(obj, cont, rootPath, containerType);
 }
 function importVideo(obj, cont, rootPath, autoscanId, containerType) {
+    print2("Error", "importVideo(import2)", obj, cont, rootPath, autoscanId, containerType)
     return addVideo(obj, cont, rootPath, containerType);
 }
 function importImage(obj, cont, rootPath, autoscanId, containerType) {
@@ -124,6 +125,9 @@ function importTrailer(obj, cont, rootPath, autoscanId, containerType) {
 var orig;
 var cont;
 var object_ref_list;
+
+print2("Error", 'import.js', orig, cont, object_ref_list)
+
 // compatibility with older configurations
 if (!cont || cont === undefined)
     cont = orig;

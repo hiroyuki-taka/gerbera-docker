@@ -3,3 +3,6 @@
 /gerbera/config/gerbera.db
 /gerbera/config/gerbera.db-*
 /gerbera/scripts/node_modules
+/gerbera/config/cache-dir
+/gerbera/config/thumbnail-cache
+node_modules

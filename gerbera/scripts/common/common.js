@@ -1026,7 +1026,6 @@ function addVideo(obj, cont, rootPath, containerType) {
             title: boxSetup[BK_videoAllDates].title,
             objectType: OBJECT_TYPE_CONTAINER,
             upnpclass: boxSetup[BK_videoAllDates].class, metaData: [] },
-
         year: {
             title: boxSetup[BK_videoUnknown].title,
             objectType: OBJECT_TYPE_CONTAINER,

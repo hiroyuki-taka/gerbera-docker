@@ -3,7 +3,7 @@
         xmlns="http://mediatomb.cc/config/2"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://mediatomb.cc/config/2 http://mediatomb.cc/config/2.xsd">
-    <server debug-mode="config|content|cds|script|layout">
+    <server debug-mode="config|script|autoscan|content">
         <ui enabled="yes" show-tooltips="yes">
             <accounts enabled="no" session-timeout="30">
                 <account user="gerbera" password="gerbera"/>
@@ -42,12 +42,12 @@
             </mark>
         </mark-played-items>
     </extended-runtime-options>
-    <import hidden-files="no" follow-symlinks="yes" import-mode="grb">
+    <import hidden-files="no" follow-symlinks="yes" import-mode="mt"> <!-- mtじゃないとjsLayoutが無効になる? -->
         <filesystem-charset>UTF-8</filesystem-charset>
         <metadata-charset>UTF-8</metadata-charset>
         <autoscan use-inotiry="auto">
-<!--            <directory location="/srv/movie2" mode="timed" interval="60" recursive="yes" hidden-files="no"/>-->
-            <directory location="/srv/movie_recorded/out" mode="timed" interval="60" recursive="yes" hidden-files="no" />
+            <directory location="/srv/movie2" mode="timed" interval="60" recursive="yes" hidden-files="no"/>
+<!--            <directory location="/srv/movie_recorded/out" mode="timed" interval="60" recursive="yes" hidden-files="no" />-->
         </autoscan>
         <scripting script-charset="UTF-8">
             <script-folder>
@@ -56,15 +56,13 @@
             </script-folder>
             <import-function>
                 <audio-file>importAudioInitial</audio-file>
-                <video-file>importVideo</video-file>
+                <video-file>_importVideo</video-file>
                 <image-file>importImage</image-file>
                 <playlist create-link="yes">importPlaylist</playlist>
                 <meta-file>importMetadata</meta-file>
-                <trailer>importTrailer</trailer>
             </import-function>
-            <virtual-layout type="js">
-                <import-script>/root/.config/scripts/custom/custom-import.js</import-script>
-                <structured-layout skip-chars="" div-char=""/>
+            <virtual-layout type="js" video-layout="js">
+<!--                <import-script>/root/.config/scripts/custom/custom-import.js</import-script>-->
                 <genre-map/>
                 <boxlayout>
                     <box key="Audio/allAlbums" title="Albums" class="object.container"/>
@@ -88,18 +86,21 @@
                     <box key="AudioStructured/allGenres" title="-Genre-" class="object.container" size="6"/>
                     <box key="AudioStructured/allTracks" title="-Track-" class="object.container" size="6"/>
                     <box key="AudioStructured/allYears" title="-Year-" class="object.container"/>
+
+                    <box key="Video/videoRoot" title="Video" class="object.container"/>
                     <box key="Video/allDates" title="Date" class="object.container"/>
                     <box key="Video/allDirectories" title="Directories" class="object.container"/>
                     <box key="Video/allVideo" title="All Video" class="object.container"/>
                     <box key="Video/allYears" title="Year" class="object.container"/>
                     <box key="Video/unknown" title="Unknown" class="object.container"/>
-                    <box key="Video/videoRoot" title="Video" class="object.container"/>
+
                     <box key="Image/allDates" title="Date" class="object.container"/>
                     <box key="Image/allDirectories" title="Directories" class="object.container"/>
                     <box key="Image/allImages" title="All Photos" class="object.container"/>
                     <box key="Image/allYears" title="Year" class="object.container"/>
                     <box key="Image/imageRoot" title="Photos" class="object.container"/>
                     <box key="Image/unknown" title="Unknown" class="object.container"/>
+
                     <box key="Trailer/trailerRoot" title="Online Services" class="object.container"/>
                     <box key="Trailer/appleTrailers" title="Apple Trailers" class="object.container"/>
                     <box key="Trailer/allTrailers" title="All Trailers" class="object.container"/>

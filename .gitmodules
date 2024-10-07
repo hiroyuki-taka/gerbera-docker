@@ -1,0 +1,4 @@
+[submodule "gerbera/source"]
+	path = gerbera/source
+	url = https://github.com/gerbera/gerbera.git
+	branch = v2.3.0
