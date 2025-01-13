@@ -45,9 +45,9 @@
     <import hidden-files="no" follow-symlinks="yes" import-mode="mt"> <!-- mtじゃないとjsLayoutが無効になる? -->
         <filesystem-charset>UTF-8</filesystem-charset>
         <metadata-charset>UTF-8</metadata-charset>
-        <autoscan use-inotiry="auto">
-            <directory location="/srv/movie2" mode="timed" interval="60" recursive="yes" hidden-files="no"/>
-<!--            <directory location="/srv/movie_recorded/out" mode="timed" interval="60" recursive="yes" hidden-files="no" />-->
+        <autoscan use-inotiry="auto" inotify-attrib="yes">
+            <directory location="/srv/movie2" mode="inotify" recursive="yes" hidden-files="no"/>
+            <directory location="/srv/movie_recorded/out" mode="inotify" recursive="yes" hidden-files="no" />
         </autoscan>
         <scripting script-charset="UTF-8">
             <script-folder>

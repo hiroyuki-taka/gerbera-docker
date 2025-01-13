@@ -1,7 +1,7 @@
 ARG BASE_IMAGE=debian:trixie-slim
 
 FROM ${BASE_IMAGE} AS builder
-ARG GERBERA_VERSION="v2.4.1"
+ARG GERBERA_VERSION="v2.3.0"
 
 RUN \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -32,7 +32,7 @@ RUN \
     cmake --build ./build -j4 -- install
 
 # ---------------------------------------
-FROM ${BASE_IMAGE} AS final
+FROM ${BASE_IMAGE} as final
 
 RUN \
     --mount=type=cache,target=/var/lib/apt \
@@ -43,9 +43,9 @@ RUN \
     --mount=type=cache,target=/var/lib/apt \
     --mount=type=cache,target=/var/cache/apt \
     apt-get install -y tini util-linux \
-        libupnp17t64 libixml11t64 uuid libpugixml1v5 zlib1g libfmt10 libspdlog1.12 libduktape207 \
-        libcurl4 libavformat61 libwavpack1 libmagic1 \
-        libexif12 libexiv2-28 libpugixml1v5 libebml5 libmatroska7 libffmpegthumbnailer4v5 \
+        libupnp17t64 libixml11t64 uuid libpugixml1v5 zlib1g libfmt9 libspdlog1.12 libduktape207 \
+        libcurl4 libavformat60 libwavpack1 libmagic1 \
+        libexif12 libexiv2-27 libpugixml1v5 libebml5 libmatroska7 libffmpegthumbnailer4v5 \
         libsqlite3-0 libmariadb3 libtag1v5
 
 COPY --from=builder /usr/local/bin/gerbera /bin

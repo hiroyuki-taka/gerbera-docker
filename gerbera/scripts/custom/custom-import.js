@@ -8,8 +8,9 @@ function importAudioStructured(obj, cont, rootPath, autoscanId, containerType) {
 }
 
 //var titleRe = /^(?<year>[0-9]{4})(?<season>[0-4]Q) (?<title>.*)/
-var titleRe = /^([0-9]{4})([0-4]Q) (.*)/
-var subTitleRe = /^(\[.*]) #([0-9]+) (.*)-([0-9]{4})年([0-9]{2})月([0-9]{2})日([0-9]{2})時([0-9]{2})分(-.*)?\..*$/
+var titleRe = /^([0-9]{4})([0-4x]Q) (.*)/
+var subTitleRe =
+  /^((\[.*]) )?#([0-9]+) (.*?)(-([0-9]{4})年([0-9]{2})月([0-9]{2})日([0-9]{2})時([0-9]{2})分(-.*)?)?\..*$/
 
 function addMovieToAllLibrary(obj, container) {
   return addMovieToLibrary(obj, ["All"].concat(container))
@@ -61,6 +62,53 @@ function addMovieToLibrary(obj, container) {
 }
 
 /**
+ * @private
+ */
+function parseTitle(container, titleCandidate) {
+  var result = {
+    year: undefined,
+    season: undefined,
+    ch: undefined,
+    count: undefined,
+    subTitle: undefined,
+
+    bcYear: undefined,
+    bcMonth: undefined,
+    bcDay: undefined,
+    bcHour: undefined,
+    bcMinutes: undefined,
+    cm: undefined,
+    cmFlag: false,
+  }
+
+  var titleFound = titleRe.exec(container)
+  var subTitleFound = subTitleRe.exec(titleCandidate)
+  if (titleFound && subTitleFound) {
+    result.year = titleFound[1]
+    result.season = titleFound[2]
+    result.title = titleFound[3]
+
+    if (subTitleFound[1]) {
+      result.ch = subTitleFound[2]
+    }
+    result.count = subTitleFound[3]
+    result.subTitle = subTitleFound[4]
+
+    if (subTitleFound[5]) {
+      result.bcYear = subTitleFound[6]
+      result.bcMonth = subTitleFound[7]
+      result.bcDay = subTitleFound[8]
+      result.bcHour = subTitleFound[9]
+      result.bcMinutes = subTitleFound[10]
+      result.cmFlag = !!subTitleFound[11]
+      result.cm = subTitleFound[11]
+    }
+  }
+
+  return result
+}
+
+/**
  *
  * @param obj {Orig}
  * @param cont {Orig}
@@ -74,21 +122,10 @@ function _importVideo(obj, cont, rootPath, autoscanId, containerType) {
   }
 
   try {
-    print2(
-      "Info",
-      "_importVideo",
-      "obj",
-      JSON.stringify(obj, null, 2),
-      "cont",
-      JSON.stringify(cont, null, 2),
-      rootPath,
-      autoscanId,
-      containerType
-    )
+    print2("Info", "_importVideo", "obj", JSON.stringify(obj, null, 2), rootPath, autoscanId, containerType)
 
     var _obj = Object.assign({}, obj)
     _obj.refID = obj.id
-    var upnpClass = obj.upnpclass
 
     var result = []
     if (rootPath.startsWith("/srv/movie2")) {
@@ -102,51 +139,45 @@ function _importVideo(obj, cont, rootPath, autoscanId, containerType) {
       // ファイル名の2つ親以上
       var parentsDirectory = pathFragment.slice(1, -2)
 
-      var titleFound = titleRe.exec(titleBase)
-      var subTitleFound = subTitleRe.exec(filename)
-      print2("Info", "_titleFound", JSON.stringify(titleFound))
-      print2("Info", "_subTitleFound", JSON.stringify(subTitleFound))
-
       switch (pathFragment[0]) {
         case "All":
           ;(function () {
-            if (titleFound && subTitleFound) {
-              var year = titleFound[1]
-              var season = titleFound[2]
-              var title = titleFound[3]
-              var ch = subTitleFound[1]
-              var count = subTitleFound[2]
-              var subTitle = subTitleFound[3]
-              var bcYear = subTitleFound[4]
-              var bcMonth = subTitleFound[5]
-              var bcDay = subTitleFound[6]
-              var bcHour = subTitleFound[7]
-              var bcMinutes = subTitleFound[8]
-              var cmFlag = !!subTitleFound[9]
+            var title = parseTitle(titleBase, filename)
+            print2("Debug", "_parseTitleResult", JSON.stringify(title, null, 2))
 
-              _obj.title = "".concat(ch, " #", count, " ", subTitle)
-              _obj.metaData["dc:date"] = "".concat(
-                [bcYear, bcMonth, bcDay].join("-"),
-                "T",
-                [bcHour, bcMinutes, "00"].join(":"),
-                "+0900"
-              )
+            if (title.subTitle) {
+              if (title.bcYear && title.bcMonth && title.bcDay) {
+                _obj.metaData[M_DATE] = [title.bcYear, title.bcMonth, title.bcDay].join("-")
+              }
 
-              var allContainer = [].concat(parentsDirectory).concat("".concat(year, season, " ", title))
-              if (cmFlag) {
+              if (title.ch) {
+                _obj.title = "".concat(title.ch, " #", title.count, " ", title.subTitle)
+              } else {
+                _obj.title = "".concat("#", title.count, " ", title.subTitle)
+              }
+
+              _obj.searchable = true
+              Object.assign(_obj.metaData, {
+                M_TRACKNUMBER: title.count.replace(/^0+/, ""),
+                M_PARTNUMBER: title.count.replace(/^0+/, ""),
+              })
+              var allContainer = []
+                .concat(parentsDirectory)
+                .concat("".concat(title.year, title.season, " ", title.title))
+
+              if (title.cmFlag) {
                 allContainer.push("CM")
-                _obj.title = _obj.title.concat(subTitleFound[9])
+                _obj.title = _obj.title.concat(title.cm)
               }
 
               result.push(addMovieToAllLibrary(_obj, allContainer))
 
               // season
-              var seasonContainer = [title]
-              if (cmFlag) {
+              var seasonContainer = [title.title]
+              if (title.cmFlag) {
                 seasonContainer.push("CM")
               }
-
-              result.push(addMovieToSeasonLibrary(_obj, year, season, seasonContainer))
+              result.push(addMovieToSeasonLibrary(_obj, title.year, title.season, seasonContainer))
             } else {
               // 親ディレクトリ、ファイル名が規定通りではない場合
               result.push(addMovieToMiscLibrary(_obj, [].concat(parentsDirectory).concat([titleBase])))
@@ -154,34 +185,31 @@ function _importVideo(obj, cont, rootPath, autoscanId, containerType) {
           })()
           break
         case "Initial":
+          var title = parseTitle(titleBase, filename)
           var initial = pathFragment[1]
-          if (titleFound && subTitleFound) {
+
+          if (title.subTitle) {
             ;(function () {
-              var year = titleFound[1]
-              var season = titleFound[2]
-              var title = titleFound[3]
-              var ch = subTitleFound[1]
-              var count = subTitleFound[2]
-              var subTitle = subTitleFound[3]
-              var bcYear = subTitleFound[4]
-              var bcMonth = subTitleFound[5]
-              var bcDay = subTitleFound[6]
-              var bcHour = subTitleFound[7]
-              var bcMinutes = subTitleFound[8]
-              var cmFlag = !!subTitleFound[9]
+              if (title.bcYear && title.bcMonth && title.bcDay) {
+                _obj.metaData[M_DATE] = [title.bcYear, title.bcMonth, title.bcDay].join("-")
+              }
 
-              _obj.title = "".concat(ch, " #", count, " ", subTitle)
-              _obj.metaData["dc:date"] = "".concat(
-                [bcYear, bcMonth, bcDay].join("-"),
-                "T",
-                [bcHour, bcMinutes, "00"].join(":"),
-                "+0900"
-              )
+              if (title.ch) {
+                _obj.title = "".concat(title.ch, " #", title.count, " ", title.subTitle)
+              } else {
+                _obj.title = "".concat("#", title.count, " ", title.subTitle)
+              }
 
-              var initialContainer = [title]
-              if (cmFlag) {
-                initialContainer.push("cm")
-                _obj.title = _obj.title.concat(subTitleFound[9])
+              _obj.searchable = true
+              Object.assign(_obj.metaData, {
+                M_TRACKNUMBER: title.count.replace(/^0+/, ""),
+                M_PARTNUMBER: title.count.replace(/^0+/, ""),
+              })
+
+              var initialContainer = [result.title]
+              if (result.cmFlag) {
+                initialContainer.push("CM")
+                _obj.title = _obj.title.concat(result.cm)
               }
 
               result.push(addMovieToInitialLibrary(_obj, initial, initialContainer))
@@ -209,7 +237,7 @@ function _importVideo(obj, cont, rootPath, autoscanId, containerType) {
         print2("Info", "_out2", outFound)
         ;(function () {
           var ch = outFound[1]
-          var title = outFound[2]
+          var title = normalizeOutTitle(outFound[2])
           var count = outFound[3] || ""
           var bcYear = outFound[4]
           var bcMonth = outFound[5]
@@ -226,12 +254,7 @@ function _importVideo(obj, cont, rootPath, autoscanId, containerType) {
           } else {
             _obj.title = _obj.title.concat(flag)
           }
-          _obj.metaData["dc:date"] = "".concat(
-            [bcYear, bcMonth, bcDay].join("-"),
-            "T",
-            [bcHour, bcMinutes, "00"].join(":"),
-            "+0900"
-          )
+          _obj.metaData["dc:date"] = [bcYear, bcMonth, bcDay].join("-")
           var container = ["Out"]
 
           if (pathFragment.length > 1) {
@@ -248,6 +271,27 @@ function _importVideo(obj, cont, rootPath, autoscanId, containerType) {
     print2("Error", e)
     return []
   }
+}
+
+/**
+ *
+ * @param title {string}
+ * @returns {string}
+ */
+function normalizeOutTitle(title) {
+  // マーク削除
+  var markPattern = ["[無]", "[字]", "[新]", "[多]", "[再]"]
+  markPattern.forEach(function (p) {
+    title = title.replace(p, "")
+  })
+
+  // 話数削除
+  var countPrefix = [/#[0-9．]+.*/, /第[0-9]+.*/, /\([0-9]+\).*/, /「.*」$/]
+  countPrefix.forEach(function (p) {
+    title = title.replace(p, "")
+  })
+
+  return title.trim()
 }
 
 function importImage(obj, cont, rootPath, autoscanId, containerType) {
