@@ -1,27 +1,19 @@
 services:
   gerbera:
-    build: ./gerbera
+    build:
+      context: ./gerbera
+      dockerfile: Dockerfile
+      args:
+        GERBERA_VERSION: "v2.4.1"
     volumes:
       - ./gerbera/config:/root/.config/gerbera
       - ./gerbera/scripts:/root/.config/scripts
       - /srv/movie2:/srv/movie2:ro
       - /srv/movie_recorded:/srv/movie_recorded:ro
-    networks:
-      gerbera_vlan:
-        ipv4_address: 192.168.0.176
+    network_mode: host
     restart: always
     logging:
       driver: json-file
       options:
         max-file: "3"
         max-size: "10M"
-networks:
-  gerbera_vlan:
-    name: gerbera_vlan
-    driver: macvlan
-    driver_opts:
-      parent: enp2s0
-    ipam:
-      config:
-      - subnet: 192.168.0.0/24
-        gateway: 192.168.0.10

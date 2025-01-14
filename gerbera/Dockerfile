@@ -32,7 +32,7 @@ RUN \
     cmake --build ./build -j4 -- install
 
 # ---------------------------------------
-FROM ${BASE_IMAGE} AS final
+FROM ${BASE_IMAGE} AS default
 
 RUN \
     --mount=type=cache,target=/var/lib/apt \
@@ -43,7 +43,7 @@ RUN \
     --mount=type=cache,target=/var/lib/apt \
     --mount=type=cache,target=/var/cache/apt \
     apt-get install -y tini util-linux \
-        libupnp17t64 libixml11t64 uuid libpugixml1v5 zlib1g libfmt10 libspdlog1.12 libduktape207 \
+        libupnp17t64 libixml11t64 uuid libpugixml1v5 zlib1g libfmt10 libspdlog1.15 libduktape207 \
         libcurl4 libavformat61 libwavpack1 libmagic1 \
         libexif12 libexiv2-28 libpugixml1v5 libebml5 libmatroska7 libffmpegthumbnailer4v5 \
         libsqlite3-0 libmariadb3 libtag1v5
@@ -61,5 +61,3 @@ EXPOSE 1900/udp
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD [ "gerbera","--port", "49494", "--config", "/root/.config/gerbera/config.xml" ]
-
-FROM final AS default
